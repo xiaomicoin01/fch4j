@@ -1,0 +1,7 @@
+#rpc:
+#  protocol: http
+#  host: 127.0.0.1
+#  port: 34452
+#  user: darkcoinrpc
+#  password: 123gfjk3R3pCCVjHtbRde2s5kzdf233sa
+#  scheme: Basic

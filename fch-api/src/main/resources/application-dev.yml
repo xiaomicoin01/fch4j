@@ -1,0 +1,38 @@
+btc:
+  job:
+    start: 94485
+    batch: 100
+    corn: 0 0/1 * * * ?
+
+rpc:
+  protocol: http
+  host: 127.0.0.1
+  port: 34452
+  user: darkcoinrpc
+  password: 123gfjk3R3pCCVjHtbRde2s5kzdf233sa
+  scheme: Basic
+  
+server:
+  port: 8081
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/tbl1?charset=utf8mb4&useSSL=false
+    username: root
+    password: root
+    driver-class-name: com.mysql.jdbc.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    generate-ddl: true
+    hibernate:
+      naming.implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+      naming.physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: false
+
+logging:
+  level:
+    org.freecash: DEBUG
+    com.neemre: ERROR
+  file: e:/log/core.log
+  root: DEBUG
+

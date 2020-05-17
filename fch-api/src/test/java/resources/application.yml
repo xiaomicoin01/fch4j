@@ -1,0 +1,12 @@
+spring:
+  profiles:
+    active: dev
+  swagger:
+    pattern: /.*
+    title: 钱包API
+    description: 钱包API
+    version: 1.0
+    termsOfServiceUrl: www.enn.cn
+    contactName: wl
+    contactUrl: www.enn.cn
+    contactEmail:

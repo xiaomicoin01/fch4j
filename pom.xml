@@ -170,60 +170,6 @@
                 <artifactId>druid</artifactId>
                 <version>${druid.version}</version>
             </dependency>
-            <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger2</artifactId>
-                <version>${springfox.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.fasterxml</groupId>
-                        <artifactId>classmate</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger-ui</artifactId>
-                <version>${springfox.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.xiaoymin</groupId>
-                <artifactId>swagger-bootstrap-ui</artifactId>
-                <version>${swagger-bootstrap-ui.version}</version>
-            </dependency>
-
-
-            <!-- eth jar -->
-            <dependency>
-                <groupId>org.web3j</groupId>
-                <artifactId>core</artifactId>
-                <version>4.5.10</version>
-            </dependency>
-            <dependency>
-                <groupId>org.web3j</groupId>
-                <artifactId>crypto</artifactId>
-                <version>4.5.10</version>
-            </dependency>
-            <dependency>
-                <groupId>com.google.protobuf</groupId>
-                <artifactId>protobuf-java</artifactId>
-                <version>3.11.1</version>
-            </dependency>
-            <dependency>
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-                <version>28.2-jre</version>
-            </dependency>
-            <dependency>
-                <groupId>com.madgag.spongycastle</groupId>
-                <artifactId>prov</artifactId>
-                <version>1.58.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.bitcoinj</groupId>
-                <artifactId>bitcoinj-core</artifactId>
-                <version>0.14.7</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 </project>

@@ -64,12 +64,14 @@ public class VerboseFchdClientImpl extends FchdClientImpl {
 	
 	@Override
 	public String createRawTransaction(List<OutputOverview> outputs,
-			Map<String, BigDecimal> toAddresses) throws FreecashException, CommunicationException {
-		String hexTransaction = super.createRawTransaction(outputs, toAddresses);
+			List<Map<String, Object>> params) throws FreecashException, CommunicationException {
+		String hexTransaction = super.createRawTransaction(outputs, params);
 		printResult(Commands.CREATE_RAW_TRANSACTION.getName(), new String[]{"outputs", 
-				"toAddresses"}, new Object[]{outputs, toAddresses}, hexTransaction);
+				"params"}, new Object[]{outputs, params}, hexTransaction);
 		return hexTransaction;
 	}
+
+
 	
 	@Override
 	public RawTransactionOverview decodeRawTransaction(String hexTransaction) throws FreecashException,
@@ -304,7 +306,7 @@ public class VerboseFchdClientImpl extends FchdClientImpl {
 	}
 	
 	@Override
-	public Object getRawTransaction(String txId, Integer verbosity) throws FreecashException,
+	public Object getRawTransaction(String txId, boolean verbosity) throws FreecashException,
 			CommunicationException {
 		Object transaction = super.getRawTransaction(txId, verbosity);
 		printResult(Commands.GET_RAW_TRANSACTION.getName(), new String[]{"txId", "verbosity"}, 
@@ -876,6 +878,15 @@ public class VerboseFchdClientImpl extends FchdClientImpl {
 		SignatureResult signatureResult = super.signRawTransaction(hexTransaction);
 		printResult(Commands.SIGN_RAW_TRANSACTION.getName(), new String[]{"hexTransaction"},
 				new Object[]{hexTransaction}, signatureResult);
+		return signatureResult;
+	}
+
+	@Override
+	public SignatureResult signRawTransactionWithKey(String hexTransaction,List<String> keys) throws FreecashException,
+			CommunicationException {
+		SignatureResult signatureResult = super.signRawTransactionWithKey(hexTransaction,keys);
+		printResult(Commands.SIGN_RAW_TRANSACTION_KEY.getName(), new String[]{"hexTransaction","keys"},
+				new Object[]{hexTransaction,keys}, signatureResult);
 		return signatureResult;
 	}
 

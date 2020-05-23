@@ -28,9 +28,29 @@ public class HexStringUtil {
         return s;
     }
 
+    /**
+     * 字符串转化成为16进制字符串
+     * @param s
+     * @return
+     */
+    public static String stringToHexString(String s) {
+        String str = "";
+        for (int i = 0; i < s.length(); i++) {
+            int ch = (int) s.charAt(i);
+            String s4 = Integer.toHexString(ch);
+            str = str + s4;
+        }
+        return str;
+    }
+
     public static void main(String args[]){
-        String hex = "464549507c337c317c77616e676c696e7c23e69cace4baba7c5669705f6e4d6554";
+        String hex = "464549507c337c317c6379746573747c23667265656361736823e887aae794b1e78eb0e9879123e8baabe4bbbde799bbe8aeb02363727970746f206964656e74697479";
         String txt = hexStringToString(hex);
         System.out.println(txt);
+
+        System.out.println(txt.split("\\|")[0]);
+        System.out.println(stringToHexString(txt));
+
+
     }
 }

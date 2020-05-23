@@ -15,7 +15,7 @@ import java.util.Properties;
  * @date 2019/10/14
  * @author wanglint
  */
-@SpringBootApplication
+//@SpringBootApplication
 public class RpcApplication {
 
     public static void main(String[] args) {

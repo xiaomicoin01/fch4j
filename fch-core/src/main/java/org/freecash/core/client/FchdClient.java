@@ -23,9 +23,9 @@ public interface FchdClient {
 	MultiSigAddress createMultiSig(Integer minSignatures, List<String> addresses)
 			throws FreecashException, CommunicationException;
 	
-	String createRawTransaction(List<OutputOverview> outputs, Map<String, BigDecimal> toAddresses) 
+	String createRawTransaction(List<OutputOverview> outputs, List<Map<String, Object>> params)
 			throws FreecashException, CommunicationException;
-	
+
 	RawTransactionOverview decodeRawTransaction(String hexTransaction) throws FreecashException,
 			CommunicationException;
 	
@@ -92,7 +92,7 @@ public interface FchdClient {
 	
 	String getRawTransaction(String txId) throws FreecashException, CommunicationException;
 
-	Object getRawTransaction(String txId, Integer verbosity) throws FreecashException,
+	Object getRawTransaction(String txId, boolean verbosity) throws FreecashException,
 			CommunicationException;
 	
 	BigDecimal getReceivedByAccount(String account) throws FreecashException,
@@ -268,6 +268,9 @@ public interface FchdClient {
 	String signMessage(String address, String message) throws FreecashException,
 			CommunicationException;
 	
+	SignatureResult signRawTransactionWithKey(String hexTransaction,List<String> keys) throws FreecashException,
+			CommunicationException;
+
 	SignatureResult signRawTransaction(String hexTransaction) throws FreecashException,
 			CommunicationException;
 

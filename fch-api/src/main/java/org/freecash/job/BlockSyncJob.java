@@ -88,7 +88,7 @@ public class BlockSyncJob {
 		//保存区块信息
 		List<String> txIds = block.getTx();
 		for(String txid : txIds){
-			RawTransaction t = (RawTransaction)this.client.getRawTransaction(txid, 1);
+			RawTransaction t = (RawTransaction)this.client.getRawTransaction(txid, true);
 
 			List<RawOutput> outputs = t.getVOut();
 			for (RawOutput out : outputs){

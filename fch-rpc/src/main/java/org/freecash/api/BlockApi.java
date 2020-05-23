@@ -33,7 +33,7 @@ public class BlockApi {
         return  client.getTransaction(txId);
     }
 
-    public RawTransaction getRawTransaction(String txId,int i) throws  Exception{
+    public RawTransaction getRawTransaction(String txId,boolean i) throws  Exception{
         return (RawTransaction)client.getRawTransaction(txId,i);
     }
 }

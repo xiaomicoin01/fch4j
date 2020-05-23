@@ -69,6 +69,7 @@ public enum Commands {
 	SEND_TO_ADDRESS("sendtoaddress", 2, 4),
 	SIGN_MESSAGE("signmessage", 2, 2),
 	SIGN_RAW_TRANSACTION("signrawtransaction", 1, 4),
+	SIGN_RAW_TRANSACTION_KEY("signrawtransactionwithkey", 2, 4),
 	STOP("stop", 0, 0),
 	VALIDATE_ADDRESS("validateaddress", 1, 1),
 	VERIFY_MESSAGE("verifymessage", 3, 3),

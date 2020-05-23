@@ -121,9 +121,9 @@ public class FchdClientImpl implements FchdClient {
 	}
 
 	@Override
-	public String createRawTransaction(List<OutputOverview> outputs, 
-			Map<String, BigDecimal> toAddresses) throws FreecashException, CommunicationException {
-		List<Object> params = CollectionUtils.asList(outputs, toAddresses);
+	public String createRawTransaction(List<OutputOverview> outputs,
+                                       List<Map<String, Object>> param) throws FreecashException, CommunicationException {
+		List<Object> params = CollectionUtils.asList(outputs, param);
 		String hexTransactionJson = rpcClient.execute(Commands.CREATE_RAW_TRANSACTION.getName(), 
 				params);
 		String hexTransaction = rpcClient.getParser().parseString(hexTransactionJson);
@@ -364,11 +364,11 @@ public class FchdClientImpl implements FchdClient {
 	}
 
 	@Override
-	public Object getRawTransaction(String txId, Integer verbosity) throws FreecashException,
+	public Object getRawTransaction(String txId, boolean verbosity) throws FreecashException,
 			CommunicationException {
 		List<Object> params = CollectionUtils.asList(txId, verbosity);
 		String transactionJson = rpcClient.execute(Commands.GET_RAW_TRANSACTION.getName(), params);
-		if(verbosity == DataFormats.HEX.getCode()) {
+		if(!verbosity) {
 			String hexTransaction = rpcClient.getParser().parseString(transactionJson);
 			return hexTransaction;
 		} else {
@@ -932,6 +932,16 @@ public class FchdClientImpl implements FchdClient {
 		String signatureResultJson = rpcClient.execute(Commands.SIGN_RAW_TRANSACTION.getName(), 
 				hexTransaction);
 		SignatureResult signatureResult = rpcClient.getMapper().mapToEntity(signatureResultJson, 
+				SignatureResult.class);
+		return signatureResult;
+	}
+
+	@Override
+	public SignatureResult signRawTransactionWithKey(String hexTransaction,List<String> keys) throws FreecashException,
+			CommunicationException {
+		List<Object> params = CollectionUtils.asList(hexTransaction, keys);
+		String signatureResultJson = rpcClient.execute(Commands.SIGN_RAW_TRANSACTION_KEY.getName(), params);
+		SignatureResult signatureResult = rpcClient.getMapper().mapToEntity(signatureResultJson,
 				SignatureResult.class);
 		return signatureResult;
 	}

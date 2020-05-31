@@ -8,11 +8,7 @@ public class ConstantKey {
 	
 	public static final String OP_RETURN="OP_RETURN";
 
-	public static final String RECV = "recv";
+	public static final String UUID = "UUID";
+	public static final String USER_AGENT = "user-agent";
 
-	public static final String SEND = "send";
-
-	public static final String TIMEBANK = "timebank";
-
-	public static final String WRITE_PAGE = "write_page";
 }

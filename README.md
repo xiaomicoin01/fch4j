@@ -8,9 +8,9 @@
 ````
 fch-common  通用的工具类
 fch-core    核心包
-fch-api     自定义处理API，主要用于解析FCH的自定义协议，以及协议内容的上链操作
+fch-api     自定义处理API，主要用于解析FCH的自定义协议，以及协议内容的上链操作,同时提供SSO接口
 fch-rpc     钱包的RPC
-
+fch-jwt     token
 ````
 # 使用方法
 
@@ -40,7 +40,28 @@ String getType(); 返回协议类型，例如：FEIP
 void analysis(String protocolValue); 参数为FCH协议体，例如：FEIP|3|1|wanglin|#本人|Vip_nMeT
   
 ```
-  
+#单点登录使用方式  
+>签名登陆
+```
+1.获取token(api/v1/auth/token)
+2.签名登陆(api/v1/auth/signature/login)
+3.token验证(api/v1/auth/signature/validate)
+```
+>密码登陆
+```
+1.获取token(api/v1/auth/token)
+2.注册密码(api/v1/auth/password/register)
+这里特殊说明，注册密码和修改密码都是这个接口
+
+密码登陆流程：
+1.注册密码(api/v1/auth/password/login)
+2.token验证(api/v1/auth/signature/validate)
+```
+
+#API
+>接口说明：http://111.229.195.222:9000/swagger-ui.html
+>接口地址：http://111.229.195.222:9000/
+
 # 说明
 ```
 1.本工程采用spring-cloud微服务模式拆解模块，使用前需要对spring-cloud有所了解

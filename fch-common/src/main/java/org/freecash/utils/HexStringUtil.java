@@ -72,7 +72,7 @@ public class HexStringUtil {
         //str = new String(str.getBytes(Charset.forName("UTF-8")),"ISO-8859-1");
         hex = stringToHexString(str);
         System.out.println(hex);
-        System.out.println(hexStringToString(hex));
+        System.out.println(hexStringToString("464549507c337c317c43597c23e6988ce794a823e697a5e5b8b823e5beaee4bfa123e8aebae59d9b7c"));
 //        hex = "464549507c337c327c616161617c23746573747c7c";
 //        txt = hexStringToString(hex);
 //        System.out.println(txt);

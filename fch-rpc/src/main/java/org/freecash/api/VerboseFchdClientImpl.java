@@ -871,6 +871,15 @@ public class VerboseFchdClientImpl extends FchdClientImpl {
 				new Object[]{address, message}, signature);
 		return signature;
 	}
+
+	@Override
+	public String signMessageWithPrivkey(String privkey, String message) throws FreecashException,
+			CommunicationException {
+		String signature = super.signMessageWithPrivkey(privkey, message);
+		printResult(Commands.SIGN_MESSAGE_WITH_PRIVKEY.getName(), new String[]{"privkey", "message"},
+				new Object[]{privkey, message}, signature);
+		return signature;
+	}
 	
 	@Override
 	public SignatureResult signRawTransaction(String hexTransaction) throws FreecashException,

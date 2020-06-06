@@ -5,12 +5,11 @@ import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.freecash.core.jsonrpc.domain.JsonRpcError;
 import org.freecash.core.jsonrpc.domain.JsonRpcRequest;
 import org.freecash.core.jsonrpc.domain.JsonRpcResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.freecash.core.FreecashException;
 import org.freecash.core.CommunicationException;
@@ -22,18 +21,15 @@ import org.freecash.core.http.client.SimpleHttpClientImpl;
 import org.freecash.core.jsonrpc.JsonMapper;
 import org.freecash.core.jsonrpc.JsonPrimitiveParser;
 import org.freecash.core.jsonrpc.JsonRpcLayerException;
-
+@Slf4j
 public class JsonRpcClientImpl implements JsonRpcClient {
-	
-	private static final Logger LOG = LoggerFactory.getLogger(JsonRpcClientImpl.class);
-	
 	private SimpleHttpClient httpClient;
 	private JsonPrimitiveParser parser;
 	private JsonMapper mapper;
 
 
 	public JsonRpcClientImpl(CloseableHttpClient httpProvider, Properties nodeConfig) {
-		LOG.info("** JsonRpcClientImpl(): initiating the JSON-RPC communication layer");
+		log.info("** JsonRpcClientImpl(): initiating the JSON-RPC communication layer");
 		httpClient = new SimpleHttpClientImpl(httpProvider, nodeConfig);
 		parser = new JsonPrimitiveParser();
 		mapper = new JsonMapper();
@@ -55,19 +51,19 @@ public class JsonRpcClientImpl implements JsonRpcClient {
 	@Override
 	public <T> String execute(String method, List<T> params) throws FreecashException,
 			CommunicationException {
-		LOG.info(">> execute(..): invoking 'freecash' JSON-RPC API command '{}' with params: '{}'",
-				method, params);
+//		log.info(">> execute(..): invoking 'freecash' JSON-RPC API command '{}' with params: '{}'",
+//				method, params);
 		String requestUuid = getNewUuid();
 		JsonRpcRequest<T> request = getNewRequest(method, params, requestUuid);
 		String requestJson = mapper.mapToJson(request);
-		LOG.debug("-- execute(..): sending JSON-RPC request as (raw): '{}'", requestJson.trim());
+//		log.debug("-- execute(..): sending JSON-RPC request as (raw): '{}'", requestJson.trim());
 		String responseJson = httpClient.execute(HttpConstants.REQ_METHOD_POST, requestJson);
-		LOG.debug("-- execute(..): received JSON-RPC response as (raw): '{}'", responseJson.trim());
+//		log.debug("-- execute(..): received JSON-RPC response as (raw): '{}'", responseJson.trim());
 		JsonRpcResponse response = mapper.mapToEntity(responseJson, JsonRpcResponse.class);
 		response = verifyResponse(request, response);
 		response = checkResponse(response);
-		LOG.info("<< execute(..): returning result for 'freecash' API command '{}' as: '{}'",
-				method, response.getResult());
+//		log.info("<< execute(..): returning result for 'freecash' API command '{}' as: '{}'",
+//				method, response.getResult());
 		return response.getResult();
 	}
 
@@ -110,7 +106,7 @@ public class JsonRpcClientImpl implements JsonRpcClient {
 
 	private <T> JsonRpcResponse verifyResponse(JsonRpcRequest<T> request, JsonRpcResponse response) 
 			throws JsonRpcLayerException {
-		LOG.debug(">> verifyResponse(..): verifying JSON-RPC response for basic protocol conformance");
+//		log.debug(">> verifyResponse(..): verifying JSON-RPC response for basic protocol conformance");
 		if(response == null) {
 			throw new JsonRpcLayerException(Errors.RESPONSE_JSONRPC_NULL);
 		}
@@ -122,14 +118,14 @@ public class JsonRpcClientImpl implements JsonRpcClient {
 		}
 		if((response.getJsonrpc() != null) && (!response.getJsonrpc().equals(
 				Defaults.JSON_RPC_VERSION))) {
-			LOG.warn("-- verifyResponse(..): JSON-RPC version mismatch - client optimized for '{}'"
+			log.warn("-- verifyResponse(..): JSON-RPC version mismatch - client optimized for '{}'"
 					+ ", node responded in '{}'", Defaults.JSON_RPC_VERSION, response.getJsonrpc());
 		}
 		return response;
 	}
 
 	private <T> JsonRpcResponse checkResponse(JsonRpcResponse response) throws FreecashException {
-		LOG.debug(">> checkResponse(..): checking JSON-RPC response for nested 'freecash' errors");
+//		log.debug(">> checkResponse(..): checking JSON-RPC response for nested 'freecash' errors");
 		if(!(response.getError() == null)) {
 			JsonRpcError freecashError = response.getError();
 			throw new FreecashException(freecashError.getCode(), String.format("Error #%s: %s",

@@ -3,5 +3,6 @@ spring:
     active: dev
 
 logging:
+  root: debug
   level:
-    org.freecash: error
+    org.freecash: debug

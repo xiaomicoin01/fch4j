@@ -1,6 +1,6 @@
 btc:
   job:
-    batch: 10000
+    batch: 1000
     corn: 0 0/1 * * * ?
 
 rpc:
@@ -28,8 +28,5 @@ spring:
     show-sql: false
 
 logging:
-  level:
-    org.freecash: ERROR
-    com.neemre: ERROR
-  file: ./logs/dak.log
-  root: error
+  file: /root/docker/fch-sso/logs/sso.log
+  root: debug

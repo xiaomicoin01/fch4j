@@ -68,6 +68,7 @@ public enum Commands {
 	SEND_RAW_TRANSACTION("sendrawtransaction", 1, 2),
 	SEND_TO_ADDRESS("sendtoaddress", 2, 4),
 	SIGN_MESSAGE("signmessage", 2, 2),
+	SIGN_MESSAGE_WITH_PRIVKEY("signmessagewithprivkey", 2, 2),
 	SIGN_RAW_TRANSACTION("signrawtransaction", 1, 4),
 	SIGN_RAW_TRANSACTION_KEY("signrawtransactionwithkey", 2, 4),
 	STOP("stop", 0, 0),

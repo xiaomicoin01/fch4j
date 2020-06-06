@@ -267,6 +267,9 @@ public interface FchdClient {
 
 	String signMessage(String address, String message) throws FreecashException,
 			CommunicationException;
+
+	String signMessageWithPrivkey(String privkey, String message) throws FreecashException,
+			CommunicationException;
 	
 	SignatureResult signRawTransactionWithKey(String hexTransaction,List<String> keys) throws FreecashException,
 			CommunicationException;

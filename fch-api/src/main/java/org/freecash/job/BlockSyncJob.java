@@ -4,6 +4,7 @@ import java.util.*;
 
 import javax.annotation.Resource;
 
+import lombok.extern.slf4j.Slf4j;
 import org.freecash.analysis.AnalysisDataComponent;
 import org.freecash.core.domain.Block;
 import org.freecash.core.domain.RawOutput;
@@ -29,7 +30,7 @@ import org.springframework.util.StringUtils;
 @Component
 @Configuration
 @EnableScheduling
-@Log4j2
+@Slf4j
 public class BlockSyncJob {
     @Value("${btc.job.batch}")
     private int batch;
@@ -61,7 +62,6 @@ public class BlockSyncJob {
         for (int i = totalInDb + 1; i < end; i++) {
             String hash = this.client.getBlockHash(i);
             log.debug("查询区块:" + i + ",hash=" + hash);
-
             processBlock(hash);
         }
         info.setValue(Integer.toString(end));

@@ -925,6 +925,15 @@ public class FchdClientImpl implements FchdClient {
 		String signature = rpcClient.getParser().parseString(signatureJson);
 		return signature;
 	}
+
+	@Override
+	public String signMessageWithPrivkey(String privkey, String message) throws FreecashException,
+			CommunicationException {
+		List<Object> params = CollectionUtils.asList(privkey, message);
+		String signatureJson = rpcClient.execute(Commands.SIGN_MESSAGE_WITH_PRIVKEY.getName(), params);
+		String signature = rpcClient.getParser().parseString(signatureJson);
+		return signature;
+	}
 	
 	@Override
 	public SignatureResult signRawTransaction(String hexTransaction) throws FreecashException,

@@ -68,20 +68,27 @@ public class Focp3v1ProtocolAnalysisData implements IAnalysisData {
             f.setFileVersion(value[6]);
         }
         f.setDataHash(value[7]);
+
+        String kg = HexStringUtil.hexStringToString(f.getDataHash());
+        String[] dataValue = kg.split("\\|");
+        if(dataValue.length < 3){
+            log.warn("存储的内容：{}，不是我汇总的知识，直接忽律",kg);
+            return;
+        }
+
         f.setFilePath(value[8]);
         f.setStatus(true);
         f.setCreateDate(new Date());
         focp3v1Dao.save(f);
 
-        String kg = HexStringUtil.hexStringToString(f.getDataHash());
-        value = kg.split("\\|");
+
         Knowledge knowledge = new Knowledge();
         knowledge.setId(SnowflakeIdWorker.getUUID());
-        knowledge.setAuthor(value[0]);
-        knowledge.setType(value[1]);
-        knowledge.setTitle(value[2]);
-        if(value.length>3){
-            knowledge.setContent(value[3]);
+        knowledge.setAuthor(dataValue[0]);
+        knowledge.setType(dataValue[1]);
+        knowledge.setTitle(dataValue[2]);
+        if(dataValue.length>3){
+            knowledge.setContent(dataValue[3]);
         }
 
         knowledge.setCreateDate(getTxDate(txId));

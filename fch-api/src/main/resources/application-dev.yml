@@ -29,9 +29,6 @@ spring:
     show-sql: false
 
 logging:
-  level:
-    org.freecash: DEBUG
-    com.neemre: ERROR
   file: e:/log/core.log
   root: DEBUG
 

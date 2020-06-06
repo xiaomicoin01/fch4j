@@ -6,6 +6,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Properties;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -22,24 +23,21 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.util.EntityUtils;
 import org.freecash.core.common.DataFormats;
 import org.freecash.core.common.Errors;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.freecash.core.NodeProperties;
 import org.freecash.core.common.Constants;
 import org.freecash.core.http.HttpConstants;
 import org.freecash.core.http.HttpLayerException;
 
+@Slf4j
 public class SimpleHttpClientImpl implements SimpleHttpClient {
-	
-	private static final Logger LOG = LoggerFactory.getLogger(SimpleHttpClientImpl.class);
-	
+
 	private CloseableHttpClient provider;
 	private Properties nodeConfig;
 
 
 	public SimpleHttpClientImpl(CloseableHttpClient provider, Properties nodeConfig) {
-		LOG.info("** SimpleHttpClientImpl(): initiating the HTTP communication layer");
+		log.info("** SimpleHttpClientImpl(): initiating the HTTP communication layer");
 		this.provider = provider;
 		this.nodeConfig = nodeConfig;
 	}
@@ -56,9 +54,9 @@ public class SimpleHttpClientImpl implements SimpleHttpClient {
 				respPayload = EntityUtils.toString(respPayloadEntity);
 				EntityUtils.consume(respPayloadEntity);
 			}
-			LOG.debug("-- execute(..): '{}' response payload received for HTTP '{}' request with " 
-					+ "status line '{}'", ((respPayloadEntity == null) ? "null" : "non-null"), 
-					reqMethod, response.getStatusLine());
+//			LOG.debug("-- execute(..): '{}' response payload received for HTTP '{}' request with "
+//					+ "status line '{}'", ((respPayloadEntity == null) ? "null" : "non-null"),
+//					reqMethod, response.getStatusLine());
 			return respPayload;
 		} catch (ClientProtocolException e) {
 			throw new HttpLayerException(Errors.REQUEST_HTTP_FAULT, e);
@@ -69,12 +67,12 @@ public class SimpleHttpClientImpl implements SimpleHttpClient {
 		} finally {
 			if(response != null) {
 				try {
-					LOG.debug("-- execute(..): attempting to recycle old HTTP response (reply to a "
-							+ "'{}' request) with status line '{}'", reqMethod, response
-							.getStatusLine());
+//					LOG.debug("-- execute(..): attempting to recycle old HTTP response (reply to a "
+//							+ "'{}' request) with status line '{}'", reqMethod, response
+//							.getStatusLine());
 					response.close();
 				} catch (IOException e) {
-					LOG.warn("<< execute(..): failed to recycle old HTTP response, message was: "
+					log.warn("<< execute(..): failed to recycle old HTTP response, message was: "
 							+ "'{}'", e.getMessage());
 				}
 			}
@@ -84,10 +82,10 @@ public class SimpleHttpClientImpl implements SimpleHttpClient {
 	@Override
 	public void close() {
 		try {
-			LOG.info(">> close(..): attempting to shut down the underlying HTTP provider");
+//			LOG.info(">> close(..): attempting to shut down the underlying HTTP provider");
 			provider.close();
 		} catch (IOException e) {
-			LOG.warn("<< close(..): failed to shut down the underlying HTTP provider, message was: "
+			log.warn("<< close(..): failed to shut down the underlying HTTP provider, message was: "
 					+ "'{}'", e.getMessage());
 		}
 	}
@@ -109,8 +107,8 @@ public class SimpleHttpClientImpl implements SimpleHttpClient {
 					nodeConfig.getProperty(NodeProperties.RPC_PORT.getKey()))));
 		String authScheme = nodeConfig.getProperty(NodeProperties.HTTP_AUTH_SCHEME.getKey());
 		request.addHeader(resolveAuthHeader(authScheme));
-		LOG.debug("<< getNewRequest(..): returning a new HTTP '{}' request with target endpoint "
-				+ "'{}' and headers '{}'", reqMethod, request.getURI(), request.getAllHeaders());
+//		LOG.debug("<< getNewRequest(..): returning a new HTTP '{}' request with target endpoint "
+//				+ "'{}' and headers '{}'", reqMethod, request.getURI(), request.getAllHeaders());
 		return request;
 	}
 
@@ -137,8 +135,8 @@ public class SimpleHttpClientImpl implements SimpleHttpClient {
 	
 	private CloseableHttpResponse checkResponse(CloseableHttpResponse response) 
 			throws HttpLayerException {
-		LOG.debug(">> checkResponse(..): checking HTTP response for non-OK status codes & "
-				+ "unexpected header values");
+//		LOG.debug(">> checkResponse(..): checking HTTP response for non-OK status codes & "
+//				+ "unexpected header values");
 		StatusLine statusLine = response.getStatusLine();
 		if((statusLine.getStatusCode() >= 400) && (statusLine.getStatusCode() <= 499)) {
 			throw new HttpLayerException(Errors.RESPONSE_HTTP_CLIENT_FAULT, statusLine.toString());

@@ -72,7 +72,7 @@ public class HexStringUtil {
         //str = new String(str.getBytes(Charset.forName("UTF-8")),"ISO-8859-1");
         hex = stringToHexString(str);
         System.out.println(hex);
-        System.out.println(hexStringToString("464549507c337c317c43597c23e6988ce794a823e697a5e5b8b823e5beaee4bfa123e8aebae59d9b7c"));
+        System.out.println(hexStringToString("61646d696e7c444546494e4954494f4e7ce6af94e789b9e5b881347ce6af94e789b9e5b881efbc88426974636f696eefbc89e79a84e6a682e5bfb5e69c80e5889de794b1e4b8ade69cace881aae59ca832303038e5b9b43131e69c8831e697a5e68f90e587baefbc8ce5b9b6e4ba8e32303039e5b9b431e69c8833e697a5e6ada3e5bc8fe8af9ee7949fe38082e6a0b9e68daee4b8ade69cace881aae79a84e6809de8b7afe8aebee8aea1e58f91e5b883e79a84e5bc80e6ba90e8bdafe4bbb6e4bba5e58f8ae5bbbae69e84e585b6e4b88ae79a84503250e7bd91e7bb9ce38082e6af94e789b9e5b881e698afe4b880e7a78d503250e5bda2e5bc8fe79a84e8999ae68b9fe79a84e58aa0e5af86e695b0e5ad97e8b4a7e5b881e38082e782b9e5afb9e782b9e79a84e4bca0e8be93e6848fe591b3e79d80e4b880e4b8aae58ebbe4b8ade5bf83e58c96e79a84e694afe4bb98e7b3bbe7bb9fe38082"));
 //        hex = "464549507c337c327c616161617c23746573747c7c";
 //        txt = hexStringToString(hex);
 //        System.out.println(txt);

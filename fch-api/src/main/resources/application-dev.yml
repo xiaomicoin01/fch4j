@@ -32,3 +32,13 @@ logging:
   file: e:/log/core.log
   root: DEBUG
 
+freecash:
+  amount: 0.01
+  address: FAxNcqAvdjMd9nhdzpggXn2Tu6khQTzjmr
+  fee: 0.0001
+  freedrive:
+    put: http://freedrive.fchwallet.com:8442/api/put
+    update: http://freedrive.fchwallet.com:8442/api/update
+    get: http://freedrive.fchwallet.com:8442/api/get
+    getDriveId: http://freedrive.fchwallet.com:8442/api/get_drive_id
+

@@ -30,3 +30,13 @@ spring:
 logging:
   file: /root/docker/fch-sso/logs/sso.log
   root: debug
+
+freecash:
+  amount: 0.01
+  address: FAxNcqAvdjMd9nhdzpggXn2Tu6khQTzjmr
+  fee: 0.0001
+  freedrive:
+    put: http://freedrive.fchwallet.com:8442/api/put
+    update: http://freedrive.fchwallet.com:8442/api/update
+    get: http://freedrive.fchwallet.com:8442/api/get
+    getDriveId: http://freedrive.fchwallet.com:8442/api/get_drive_id

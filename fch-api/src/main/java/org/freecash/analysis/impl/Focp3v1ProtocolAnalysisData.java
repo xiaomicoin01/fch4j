@@ -2,13 +2,17 @@ package org.freecash.analysis.impl;
 
 import lombok.extern.log4j.Log4j2;
 import org.freecash.analysis.IAnalysisData;
+import org.freecash.component.FreeDriveComponnet;
 import org.freecash.core.client.FchdClient;
+import org.freecash.core.domain.RawInput;
 import org.freecash.core.domain.RawTransaction;
 import org.freecash.dao.IFocp3v1Dao;
 import org.freecash.dao.IKnowledgeDao;
 import org.freecash.domain.Focp3v1;
 import org.freecash.domain.Knowledge;
 import org.freecash.domain.ProtocolHeader;
+import org.freecash.dto.FreeDriveGetRequest;
+import org.freecash.dto.FreeDriveGetResponse;
 import org.freecash.utils.HexStringUtil;
 import org.freecash.utils.SnowflakeIdWorker;
 import org.springframework.stereotype.Component;
@@ -32,6 +36,8 @@ public class Focp3v1ProtocolAnalysisData implements IAnalysisData {
     private IFocp3v1Dao focp3v1Dao;
     @Resource
     private IKnowledgeDao knowledgeDao;
+    @Resource
+    private FreeDriveComponnet freeDriveComponnet;
 
     /**
      * CID协议类型
@@ -69,21 +75,26 @@ public class Focp3v1ProtocolAnalysisData implements IAnalysisData {
         }
         f.setDataHash(value[7]);
 
-        String kg = HexStringUtil.hexStringToString(f.getDataHash());
-        String[] dataValue = kg.split("\\|");
-        if(dataValue.length < 3){
-            log.warn("存储的内容：{}，不是我汇总的知识，直接忽律",kg);
-            return;
-        }
-
         f.setFilePath(value[8]);
         f.setStatus(true);
         f.setCreateDate(new Date());
         focp3v1Dao.save(f);
 
+        String address = getAddress(txId);
+        FreeDriveGetResponse response = freeDriveComponnet.put(new FreeDriveGetRequest(address,f.getFilePath()));
 
         Knowledge knowledge = new Knowledge();
         knowledge.setId(SnowflakeIdWorker.getUUID());
+        String[] dataValue;
+        if(response.getUpdate() == null || response.getUpdate().size() == 0){
+            String tmp = HexStringUtil.hexStringToString(response.getPut().getData());
+            dataValue = tmp.split("\\|");
+
+        }else{
+            int len = response.getUpdate().size();
+            String tmp = HexStringUtil.hexStringToString(response.getUpdate().get(len -1).getData());
+            dataValue = tmp.split("\\|");
+        }
         knowledge.setAuthor(dataValue[0]);
         knowledge.setType(dataValue[1]);
         knowledge.setTitle(dataValue[2]);
@@ -94,11 +105,21 @@ public class Focp3v1ProtocolAnalysisData implements IAnalysisData {
         knowledge.setCreateDate(getTxDate(txId));
         knowledge.setDriveId(f.getFilePath());
         knowledge.setTxId(txId);
+
         knowledgeDao.save(knowledge);
     }
 
-    public Date getTxDate(String txId) throws Exception{
+    private Date getTxDate(String txId) throws Exception{
         RawTransaction tx = (RawTransaction)fchdClient.getRawTransaction(txId,true);
         return new Date(tx.getTime() * 1000);
+    }
+
+    private String getAddress(String txId) throws Exception{
+        RawTransaction tx = (RawTransaction)fchdClient.getRawTransaction(txId,true);
+        RawInput input = tx.getVIn().get(0);
+        String tmp = input.getTxId();
+        int vout = input.getVOut();
+        tx = (RawTransaction)fchdClient.getRawTransaction(tmp,true);
+        return tx.getVOut().get(vout).getScriptPubKey().getAddresses().get(0);
     }
 }

@@ -2,6 +2,7 @@ package org.freecash.utils;
 
 import org.apache.http.*;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ConnectionKeepAliveStrategy;
@@ -11,12 +12,13 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicHeaderElementIterator;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
-import java.util.Locale;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class HttpClientCommpont {
@@ -88,6 +90,27 @@ public class HttpClientCommpont {
         StringEntity postEntity = new StringEntity(jsonData, "UTF-8");
         postEntity.setContentType("application/json");
         httpPost.setEntity(postEntity);
+        return httpPost;
+    }
+    /**
+     * 发送json数据
+     * @param url 地址
+     * @param jsonData json字符串
+     * @return
+     */
+    public static HttpPost getPostForMap(String url, Map<String,Object> paramMap) throws Exception{
+        HttpPost httpPost = new HttpPost(url);
+
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        paramMap.forEach((k,v)->{
+            if(Objects.isNull(v)){
+                params.add(new BasicNameValuePair(k,""));
+            }else{
+                params.add(new BasicNameValuePair(k,v.toString()));
+            }
+        });
+
+        httpPost.setEntity(new UrlEncodedFormEntity(params, "utf-8"));
         return httpPost;
     }
 

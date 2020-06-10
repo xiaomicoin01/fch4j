@@ -73,40 +73,49 @@ public class Focp3v1ProtocolAnalysisData implements IAnalysisData {
         if(!Objects.isNull(value[6])){
             f.setFileVersion(value[6]);
         }
-        f.setDataHash(value[7]);
+        if(value.length > 7){
+            f.setDataHash(value[7]);
+        }
+        if(value.length > 8){
+            f.setFilePath(value[8]);
+        }
 
-        f.setFilePath(value[8]);
         f.setStatus(true);
         f.setCreateDate(new Date());
         focp3v1Dao.save(f);
 
-        String address = getAddress(txId);
-        FreeDriveGetResponse response = freeDriveComponnet.put(new FreeDriveGetRequest(address,f.getFilePath()));
+        try {
+            String address = getAddress(txId);
+            FreeDriveGetResponse response = freeDriveComponnet.put(new FreeDriveGetRequest(address,f.getFilePath()));
 
-        Knowledge knowledge = new Knowledge();
-        knowledge.setId(SnowflakeIdWorker.getUUID());
-        String[] dataValue;
-        if(response.getUpdate() == null || response.getUpdate().size() == 0){
-            String tmp = HexStringUtil.hexStringToString(response.getPut().getData());
-            dataValue = tmp.split("\\|");
+            Knowledge knowledge = new Knowledge();
+            knowledge.setId(SnowflakeIdWorker.getUUID());
+            String[] dataValue;
+            if(response.getUpdate() == null || response.getUpdate().size() == 0){
+                String tmp = HexStringUtil.hexStringToString(response.getPut().getData());
+                dataValue = tmp.split("\\|");
 
-        }else{
-            int len = response.getUpdate().size();
-            String tmp = HexStringUtil.hexStringToString(response.getUpdate().get(len -1).getData());
-            dataValue = tmp.split("\\|");
+            }else{
+                int len = response.getUpdate().size();
+                String tmp = HexStringUtil.hexStringToString(response.getUpdate().get(len -1).getData());
+                dataValue = tmp.split("\\|");
+            }
+            knowledge.setAuthor(dataValue[0]);
+            knowledge.setType(dataValue[1]);
+            knowledge.setTitle(dataValue[2]);
+            if(dataValue.length>3){
+                knowledge.setContent(dataValue[3]);
+            }
+
+            knowledge.setCreateDate(getTxDate(txId));
+            knowledge.setDriveId(f.getFilePath());
+            knowledge.setTxId(txId);
+
+            knowledgeDao.save(knowledge);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("获取知识事变，失败信息为：{}，driveId = {}",e.getMessage(),f.getFilePath());
         }
-        knowledge.setAuthor(dataValue[0]);
-        knowledge.setType(dataValue[1]);
-        knowledge.setTitle(dataValue[2]);
-        if(dataValue.length>3){
-            knowledge.setContent(dataValue[3]);
-        }
-
-        knowledge.setCreateDate(getTxDate(txId));
-        knowledge.setDriveId(f.getFilePath());
-        knowledge.setTxId(txId);
-
-        knowledgeDao.save(knowledge);
     }
 
     private Date getTxDate(String txId) throws Exception{

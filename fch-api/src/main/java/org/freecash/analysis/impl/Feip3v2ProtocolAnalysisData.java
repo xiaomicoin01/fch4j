@@ -56,7 +56,7 @@ public class Feip3v2ProtocolAnalysisData implements IAnalysisData {
         //注销(有垃圾数据)
         boolean isTrue = (value.length < 3) || (value.length > 3 && StringUtils.isEmpty(value[3]));
         if(isTrue){
-            changeStatus(feip3v2);
+            //changeStatus(feip3v2);
             return;
         }
         //注销CID
@@ -92,7 +92,8 @@ public class Feip3v2ProtocolAnalysisData implements IAnalysisData {
         //更新
         if(value.length > 3 && StringUtils.isNotEmpty(value[3])){
             String tmp = value[3] + "_" + address.substring(address.length() - 4);
-            if(Objects.equals(tmp,feip3v2.get(0).getNickName())){
+            if(Objects.equals(tmp,feip3v2.get(0).getNickName()) &&
+                Objects.equals(feip3v2.get(0).getAddress(),address)){
                 log.warn("cid：{}，address:{}已经存在，且cid是一样的，不用操作，直接跳过",tmp, address);
                 return;
             }
@@ -145,7 +146,11 @@ public class Feip3v2ProtocolAnalysisData implements IAnalysisData {
             if(CollectionUtils.isEmpty(feip3v2s)){
                 break;
             }else{
-                len++;
+                if(Objects.equals(feip3v2s.get(0).getAddress(),address)){
+                    break;
+                }else{
+                    len++;
+                }
             }
         }
         return nickName;

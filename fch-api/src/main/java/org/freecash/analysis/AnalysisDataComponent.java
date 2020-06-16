@@ -50,8 +50,8 @@ public class AnalysisDataComponent implements ApplicationContextAware {
         }
         String protocolName = tmps[0];
         String protocolNo = tmps[1];
-        //String protocolVersion = tmps[2];
-        IAnalysisData tmp = allAnalysisData.get(new ProtocolHeader(protocolName,protocolNo));
+        String protocolVersion = tmps[2];
+        IAnalysisData tmp = allAnalysisData.get(new ProtocolHeader(protocolName,protocolNo,protocolVersion));
         if(Objects.isNull(tmp)){
             log.error("不能处理协议内容：{}",protocolValue);
         }else{

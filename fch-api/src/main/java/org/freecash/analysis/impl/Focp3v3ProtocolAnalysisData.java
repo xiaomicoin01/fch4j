@@ -13,7 +13,9 @@ import org.freecash.domain.Knowledge;
 import org.freecash.domain.ProtocolHeader;
 import org.freecash.dto.FreeDriveGetRequest;
 import org.freecash.dto.FreeDriveGetResponse;
+import org.freecash.dto.KnowledgeType;
 import org.freecash.utils.HexStringUtil;
+import org.freecash.utils.ProtocolUtil;
 import org.freecash.utils.SnowflakeIdWorker;
 import org.springframework.stereotype.Component;
 
@@ -29,7 +31,7 @@ import java.util.Objects;
  **/
 @Component
 @Log4j2
-public class Focp3v1ProtocolAnalysisData implements IAnalysisData {
+public class Focp3v3ProtocolAnalysisData implements IAnalysisData {
     @Resource
     private FchdClient fchdClient;
     @Resource
@@ -47,8 +49,7 @@ public class Focp3v1ProtocolAnalysisData implements IAnalysisData {
     @Override
     public List<ProtocolHeader> getType() {
         return Arrays.asList(
-                new ProtocolHeader("FEIP","2","1"),
-                new ProtocolHeader("FEIP","2","2")
+                new ProtocolHeader("FEIP","2","3")
 
         );
     }
@@ -96,19 +97,27 @@ public class Focp3v1ProtocolAnalysisData implements IAnalysisData {
             knowledge.setId(SnowflakeIdWorker.getUUID());
             String[] dataValue;
             if(response.getUpdate() == null || response.getUpdate().size() == 0){
-                String tmp = HexStringUtil.hexStringToString(response.getPut().getData());
-                dataValue = tmp.split("\\|");
+                String hexStr = HexStringUtil.hexStringToString(response.getPut().getData());
+                ProtocolUtil.Result res = ProtocolUtil.getValue(hexStr,0,2);
+                knowledge.setAuthor(res.getValue());
+                res = ProtocolUtil.getValue(hexStr,res.getEnd(),2);
+                knowledge.setType(res.getValue());
+                res = ProtocolUtil.getValue(hexStr,res.getEnd(),2);
+                knowledge.setTitle(res.getValue());
+                res = ProtocolUtil.getValue(hexStr,res.getEnd(),8);
+                knowledge.setContent(res.getValue());
 
             }else{
                 int len = response.getUpdate().size();
-                String tmp = HexStringUtil.hexStringToString(response.getUpdate().get(len -1).getData());
-                dataValue = tmp.split("\\|");
-            }
-            knowledge.setAuthor(dataValue[0]);
-            knowledge.setType(dataValue[1]);
-            knowledge.setTitle(dataValue[2]);
-            if(dataValue.length>3){
-                knowledge.setContent(dataValue[3]);
+                String hexStr = HexStringUtil.hexStringToString(response.getUpdate().get(len -1).getData());
+                ProtocolUtil.Result res = ProtocolUtil.getValue(hexStr,0,2);
+                knowledge.setAuthor(res.getValue());
+                res = ProtocolUtil.getValue(hexStr,res.getEnd(),2);
+                knowledge.setType(res.getValue());
+                res = ProtocolUtil.getValue(hexStr,res.getEnd(),2);
+                knowledge.setTitle(res.getValue());
+                res = ProtocolUtil.getValue(hexStr,res.getEnd(),8);
+                knowledge.setContent(res.getValue());
             }
 
             knowledge.setCreateDate(getTxDate(txId));

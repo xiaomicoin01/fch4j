@@ -51,6 +51,25 @@ public class HexStringUtil {
 
     }
 
+    public static String integerToHex(int src, int length){
+        String target = Integer.toHexString(src);
+        StringBuilder sb = new StringBuilder();
+        if(target.length() < length){
+            for(int i =0;i<length-target.length();i++){
+                sb.append("0");
+            }
+        }
+        return sb.append(target).toString();
+    }
+
+    public static Integer hexToInteger(String hex){
+        try {
+            return Integer.parseInt(hex,16);
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
+
     public static void main(String args[]) throws Exception{
         String hex = "464549507c337c317c6379746573747c23667265656361736823e887aae794b1e78eb0e9879123e8baabe4bbbde799bbe8aeb02363727970746f206964656e74697479";
         String txt = hexStringToString(hex);
@@ -82,5 +101,8 @@ public class HexStringUtil {
 //        for(String str : tmp.split("\\|")){
 //            System.out.println(str);
 //        }
+
+        System.out.println(integerToHex(16,4));
+        System.out.println(hexToInteger("0010"));
     }
 }

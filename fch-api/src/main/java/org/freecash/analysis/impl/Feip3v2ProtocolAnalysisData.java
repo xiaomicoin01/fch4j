@@ -40,7 +40,10 @@ public class Feip3v2ProtocolAnalysisData implements IAnalysisData {
      */
     @Override
     public List<ProtocolHeader> getType() {
-        return Arrays.asList( new ProtocolHeader("FEIP","3"));
+        return Arrays.asList(
+                new ProtocolHeader("FEIP","3","1"),
+                new ProtocolHeader("FEIP","3","2")
+        );
     }
 
     /**

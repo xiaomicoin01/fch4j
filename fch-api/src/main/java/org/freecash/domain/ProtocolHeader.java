@@ -16,12 +16,12 @@ import lombok.NoArgsConstructor;
 public class ProtocolHeader {
     private String protocolName;
     private String protocolNo;
-    //private String protocolVersion;
+    private String protocolVersion;
 
 
     public static void main(String[] args) {
-        ProtocolHeader p1 = new ProtocolHeader("1","2");
-        ProtocolHeader p2 = new ProtocolHeader("1","2");
+        ProtocolHeader p1 = new ProtocolHeader("1","2","3");
+        ProtocolHeader p2 = new ProtocolHeader("1","2","");
         System.out.println(p1.equals(p2));
         System.out.println(p1.hashCode());
     }

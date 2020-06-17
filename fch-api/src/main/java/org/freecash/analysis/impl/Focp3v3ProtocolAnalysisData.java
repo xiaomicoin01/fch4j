@@ -68,22 +68,8 @@ public class Focp3v3ProtocolAnalysisData implements IAnalysisData {
         f.setProtocolName(value[0]);
         f.setProtocolNo(Integer.valueOf(value[1]));
         f.setProtocolVersion(value[2]);
-        f.setAuthor(value[3]);
-        if(!Objects.isNull(value[4])){
-            f.setFileType(value[4]);
-        }
-        if(!Objects.isNull(value[5])){
-            f.setFileNo(value[5]);
-        }
-        if(!Objects.isNull(value[6])){
-            f.setFileVersion(value[6]);
-        }
-        if(value.length > 7){
-            f.setDataHash(value[7]);
-        }
-        if(value.length > 8){
-            f.setFilePath(value[8]);
-        }
+        f.setDataHash(value[value.length-2]);
+        f.setFilePath(value[value.length-1]);
 
         f.setStatus(true);
         f.setCreateDate(new Date());
@@ -97,7 +83,7 @@ public class Focp3v3ProtocolAnalysisData implements IAnalysisData {
             knowledge.setId(SnowflakeIdWorker.getUUID());
             String[] dataValue;
             if(response.getUpdate() == null || response.getUpdate().size() == 0){
-                String hexStr = HexStringUtil.hexStringToString(response.getPut().getData());
+                String hexStr = response.getPut().getData();
                 ProtocolUtil.Result res = ProtocolUtil.getValue(hexStr,0,2);
                 knowledge.setAuthor(res.getValue());
                 res = ProtocolUtil.getValue(hexStr,res.getEnd(),2);

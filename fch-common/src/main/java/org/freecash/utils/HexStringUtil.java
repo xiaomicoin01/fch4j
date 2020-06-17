@@ -37,6 +37,9 @@ public class HexStringUtil {
      */
     public static String stringToHexString(String s) {
         try{
+            if(StringUtil.isEmpty(s)){
+                return "";
+            }
             s = new String(s.getBytes(Charset.forName("UTF-8")),"ISO-8859-1");
             String str = "";
             for (int i = 0; i < s.length(); i++) {

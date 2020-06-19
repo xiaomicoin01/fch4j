@@ -5,6 +5,5 @@ package org.freecash.domain;
  * @date 2019/10/17 21:01
  **/
 public enum OptTypeEnum {
-    SEND,
-    RECV;
+    CREATE, REMOVE, UPDATE
 }

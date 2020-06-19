@@ -22,59 +22,51 @@ import java.util.Date;
 public class Knowledge implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-
     @Id
     @Column(name = "id")
     private String id;
 
-    /**
-     * 作者
-     **/
-    @Column(name = "author")
-    private String author;
+    @Column(name = "protocol_name", columnDefinition = "varchar(20) comment '协议名称'")
+    private String protocolName;
 
-    /**
-     * 标题
-     **/
-    @Column(name = "title")
-    private String title;
+    @Column(name = "protocol_no", columnDefinition = "int comment '协议编号'")
+    private Integer protocolNo;
 
-    /**
-     * 内容
-     **/
-    @Column(name = "content")
-    private String content;
-    /**
-     * 内容
-     **/
-    @Column(name = "driveId")
+    @Column(name = "protocol_version", columnDefinition = "varchar(20) comment '版本号'")
+    private String protocolVersion;
+
+    @Column(name = "action", columnDefinition = "varchar(20) comment '操作'")
+    private String action;
+
+    @Column(name = "data_hash", columnDefinition = "varchar(200) comment '数据哈希'")
+    private String dataHash;
+
+    @Column(name = "encrypt", columnDefinition = "varchar(200) comment '加密标志'")
+    private String encrypt;
+
+    @Column(name = "encrypted_pwd", columnDefinition = "varchar(1000) comment '密钥'")
+    private String encryptedPwd;
+
+    @Column(name = "language", columnDefinition = "varchar(20) comment '语言'")
+    private String language;
+
+    @Column(name = "drive_id", columnDefinition = "varchar(200) comment '存储id'")
     private String driveId;
 
+    @Column(name = "author", columnDefinition = "varchar(200) comment '作者'")
+    private String author;
 
-    /**
-     * 类型
-     **/
-    @Column(name = "type")
+    @Column(name = "title", columnDefinition = "varchar(200) comment '题目'")
+    private String title;
+
+    @Column(name = "content", columnDefinition = "comment '内容'")
+    @Lob
+    private String content;
+
+    @Column(name = "type", columnDefinition = "varchar(200) comment '类型'")
     private String type;
 
-    /**
-     * 交易ID
-     **/
-    @Column(name = "txId")
-    private String txId;
-
-    /**
-     * 创建时间
-     **/
-    @Column(name = "create_date")
+    @Column(name = "create_date", columnDefinition = "comment '创建时间'")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createDate;
-
-    /**
-     * 创建时间
-     **/
-    @Column(name = "update_date")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date updateDate;
 }

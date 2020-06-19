@@ -3,6 +3,7 @@ package org.freecash.domain;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.java.Log;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -25,68 +26,49 @@ public class Focp5v1 implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name="pid")
+	@Column(name = "id")
 	private String id;
-		
-	/** 协议名称 **/
-	@Column(name="protocol_name")
-	private String protocolName;
-		
-	/** 协议编号 **/
-	@Column(name="protocol_no")
-	private Integer protocolNo;
-		
-	/** 版本号 **/
-	@Column(name="protocol_version")
-	private String protocolVersion;
-		
-	/** 昵称 **/
-	@Column(name="author")
-	private String author;
-		
-	/** 标签 **/
-	@Column(name="data_hash")
+
+	@Column(name = "protocol_name", columnDefinition = "varchar(20) comment '协议名称'")
+	private String protocolName="FOCP";
+
+	@Column(name = "protocol_no", columnDefinition = "int comment '协议编号'")
+	private Integer protocolNo=5;
+
+	@Column(name = "protocol_version", columnDefinition = "varchar(20) comment '版本号'")
+	private String protocolVersion="1";
+
+	@Column(name = "action", columnDefinition = "varchar(20) comment '操作'")
+	private String action;
+
+	@Column(name = "data_hash", columnDefinition = "varchar(200) comment '数据哈希'")
 	private String dataHash;
-		
-	/** 邀请人 **/
-	@Column(name="encrypt")
+
+	@Column(name = "encrypt", columnDefinition = "varchar(200) comment '加密标志'")
 	private String encrypt;
-		
-	/** 详情 **/
-	@Column(name="encrypted_pwd")
+
+	@Column(name = "encrypted_pwd", columnDefinition = "varchar(1000) comment '密钥'")
 	private String encryptedPwd;
-	
-	/** 详情 **/
-	@Column(name="drive_id")
+
+	@Column(name = "drive_id", columnDefinition = "varchar(200) comment '存储id'")
 	private String driveId;
 
-	/** 详情 **/
-	@Column(name="file_type")
+	@Column(name = "file_type", columnDefinition = "varchar(200) comment '文件类型'")
 	private String fileType;
 
-	/** 详情 **/
-	@Column(name="file_name")
+	@Column(name = "file_name", columnDefinition = "varchar(200) comment '文件名'")
 	private String fileName;
 
-	/** 详情 **/
-	@Column(name="quoter")
+	@Column(name = "quoter", columnDefinition = "varchar(1000) comment '引用源'")
 	private String quoter;
 
-	/** 状态 **/
-	@Column(name="status")
+	@Column(name = "file", columnDefinition = "varchar(200) comment '文件'")
 	@Lob
 	private String file;
 
-	/** 创建时间 **/
-	@Column(name="create_date")
+	@Column(name = "create_date", columnDefinition = "comment '创建时间'")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createDate;
-
-	/** 创建时间 **/
-	@Column(name="update_date")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date updateDate;
-		
 
 
 }

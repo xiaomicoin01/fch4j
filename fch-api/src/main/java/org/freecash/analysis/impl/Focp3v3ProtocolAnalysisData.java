@@ -8,13 +8,11 @@ import org.freecash.core.domain.RawInput;
 import org.freecash.core.domain.RawTransaction;
 import org.freecash.dao.IFocp3v1Dao;
 import org.freecash.dao.IKnowledgeDao;
-import org.freecash.domain.Focp3v1;
+import org.freecash.domain.Focp3v3;
 import org.freecash.domain.Knowledge;
 import org.freecash.domain.ProtocolHeader;
 import org.freecash.dto.FreeDriveGetRequest;
 import org.freecash.dto.FreeDriveGetResponse;
-import org.freecash.dto.KnowledgeType;
-import org.freecash.utils.HexStringUtil;
 import org.freecash.utils.ProtocolUtil;
 import org.freecash.utils.SnowflakeIdWorker;
 import org.springframework.stereotype.Component;
@@ -23,7 +21,6 @@ import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author wanglint
@@ -49,7 +46,8 @@ public class Focp3v3ProtocolAnalysisData implements IAnalysisData {
     @Override
     public List<ProtocolHeader> getType() {
         return Arrays.asList(
-                new ProtocolHeader("FEIP","2","3")
+                new ProtocolHeader("FOCP","3","2"),
+                new ProtocolHeader("FOCP","3","3")
 
         );
     }
@@ -63,7 +61,7 @@ public class Focp3v3ProtocolAnalysisData implements IAnalysisData {
     public void analysis(String protocolValue,String txId) throws Exception{
         String[] value = protocolValue.split("\\|");
 
-        Focp3v1 f = new Focp3v1();
+        Focp3v3 f = new Focp3v3();
         f.setId(SnowflakeIdWorker.getUUID());
         f.setProtocolName(value[0]);
         f.setProtocolNo(Integer.valueOf(value[1]));
@@ -71,7 +69,6 @@ public class Focp3v3ProtocolAnalysisData implements IAnalysisData {
         f.setDataHash(value[value.length-2]);
         f.setFilePath(value[value.length-1]);
 
-        f.setStatus(true);
         f.setCreateDate(new Date());
         focp3v1Dao.save(f);
 
@@ -82,33 +79,55 @@ public class Focp3v3ProtocolAnalysisData implements IAnalysisData {
             Knowledge knowledge = new Knowledge();
             knowledge.setId(SnowflakeIdWorker.getUUID());
             String[] dataValue;
-            if(response.getUpdate() == null || response.getUpdate().size() == 0){
-                String hexStr = response.getPut().getData();
-                ProtocolUtil.Result res = ProtocolUtil.getValue(hexStr,0,2);
-                knowledge.setAuthor(res.getValue());
-                res = ProtocolUtil.getValue(hexStr,res.getEnd(),2);
-                knowledge.setType(res.getValue());
-                res = ProtocolUtil.getValue(hexStr,res.getEnd(),2);
-                knowledge.setTitle(res.getValue());
-                res = ProtocolUtil.getValue(hexStr,res.getEnd(),8);
-                knowledge.setContent(res.getValue());
+            String dataHex = "";
+            String metaDataHex = "";
 
+            if(response.getUpdate() == null || response.getUpdate().size() == 0){
+                dataHex = response.getPut().getData();
+                metaDataHex = response.getPut().getMetadata();
             }else{
                 int len = response.getUpdate().size();
-                String hexStr = HexStringUtil.hexStringToString(response.getUpdate().get(len -1).getData());
-                ProtocolUtil.Result res = ProtocolUtil.getValue(hexStr,0,2);
-                knowledge.setAuthor(res.getValue());
-                res = ProtocolUtil.getValue(hexStr,res.getEnd(),2);
-                knowledge.setType(res.getValue());
-                res = ProtocolUtil.getValue(hexStr,res.getEnd(),2);
-                knowledge.setTitle(res.getValue());
-                res = ProtocolUtil.getValue(hexStr,res.getEnd(),8);
-                knowledge.setContent(res.getValue());
+                dataHex = response.getUpdate().get(len -1).getData();
+                metaDataHex = response.getUpdate().get(len -1).getMetadata();
             }
 
+            ProtocolUtil.Result res = ProtocolUtil.getValue(dataHex,0,2);
+            knowledge.setAuthor(res.getValue());
+            res = ProtocolUtil.getValue(dataHex,res.getEnd(),2);
+            knowledge.setType(res.getValue());
+            res = ProtocolUtil.getValue(dataHex,res.getEnd(),2);
+            knowledge.setTitle(res.getValue());
+            res = ProtocolUtil.getValue(dataHex,res.getEnd(),8);
+            knowledge.setContent(res.getValue());
+
+            res = ProtocolUtil.getValue(metaDataHex,0,1);
+            knowledge.setProtocolName(res.getValue());
+
+            res = ProtocolUtil.getValue(metaDataHex,res.getEnd(),1);
+            knowledge.setProtocolNo(Integer.parseInt(res.getValue()));
+
+            res = ProtocolUtil.getValue(metaDataHex,res.getEnd(),1);
+            knowledge.setProtocolVersion(res.getValue());
+
+            res = ProtocolUtil.getValue(metaDataHex,res.getEnd(),1);
+            knowledge.setAction(res.getValue());
+
+            res = ProtocolUtil.getValue(metaDataHex,res.getEnd(),2);
+            knowledge.setDataHash(res.getValue());
+
+            res = ProtocolUtil.getValue(metaDataHex,res.getEnd(),2);
+            knowledge.setEncrypt(res.getValue());
+
+            res = ProtocolUtil.getValue(metaDataHex,res.getEnd(),3);
+            knowledge.setEncryptedPwd(res.getValue());
+
+            res = ProtocolUtil.getValue(metaDataHex,res.getEnd(),2);
+            knowledge.setLanguage(res.getValue());
+
+            res = ProtocolUtil.getValue(metaDataHex,res.getEnd(),2);
+            knowledge.setDriveId(res.getValue());
+
             knowledge.setCreateDate(getTxDate(txId));
-            knowledge.setDriveId(f.getFilePath());
-            knowledge.setTxId(txId);
 
             knowledgeDao.save(knowledge);
         } catch (Exception e) {

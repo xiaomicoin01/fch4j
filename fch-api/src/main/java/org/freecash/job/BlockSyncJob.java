@@ -46,6 +46,8 @@ public class BlockSyncJob {
     @Resource
     private IFchVoutDao fchVoutDao;
 
+    private List<FchVout> outs = new ArrayList<>();
+
     @Scheduled(cron = "${btc.job.corn}")
     @Transactional(rollbackFor = Exception.class)
     public void run() throws Exception {
@@ -70,7 +72,9 @@ public class BlockSyncJob {
             processBlock(hash);
         }
         info.setValue(Integer.toString(end));
+        fchVoutDao.saveAll(outs);
         blockInfoService.saveBlock(info);
+        this.outs.clear();
     }
 
     /**
@@ -110,6 +114,8 @@ public class BlockSyncJob {
         }
     }
 
+
+
     private void processVoutAndVin(RawTransaction t){
         List<RawOutput> outputs = t.getVOut();
         for(RawOutput out : outputs){
@@ -129,7 +135,7 @@ public class BlockSyncJob {
                     out.getN(),
                     amount
             );
-            fchVoutDao.save(fchVout);
+            this.outs.add(fchVout);
         }
 
         for(RawInput input : t.getVIn()){
@@ -139,6 +145,8 @@ public class BlockSyncJob {
             }
             int n = input.getVOut();
             fchVoutDao.deleteByTxIdAndN(txId,n);
+            FchVout fchVout = new FchVout(txId,n);
+            this.outs.remove(fchVout);
         }
     }
 }

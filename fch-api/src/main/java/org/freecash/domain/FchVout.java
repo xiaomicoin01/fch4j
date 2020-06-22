@@ -9,6 +9,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * 知识库 Knowledge
@@ -43,4 +44,28 @@ public class FchVout implements Serializable {
 
     @Column(name = "amount",columnDefinition = "varchar(255) NULL DEFAULT NULL COMMENT '数量'")
     private BigDecimal amount;
+
+    public FchVout(String txId, int n) {
+        this.txId = txId;
+        this.n = n;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof FchVout)) {
+            return false;
+        }
+        FchVout fchVout = (FchVout) o;
+        return getN() == fchVout.getN() &&
+                Objects.equals(getTxId(), fchVout.getTxId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getTxId(), getN());
+    }
 }

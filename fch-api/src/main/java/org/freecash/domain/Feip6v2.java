@@ -43,9 +43,9 @@ public class Feip6v2 implements Serializable {
 	private String protocolVersion="2";
 		
 	/** 操作 **/
-	@Column(name="nick_name",columnDefinition = "varchar(200) comment '操作'")
+	@Column(name="operation",columnDefinition = "varchar(200) comment '操作'")
 	@Enumerated(EnumType.STRING)
-	private Feip6v2Otption option;
+	private Feip6v2Otption operation;
 		
 	/** 开始有效期 **/
 	@Column(name="begin_date",columnDefinition = "varchar(200) comment '开始有效期'")

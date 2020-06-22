@@ -58,7 +58,7 @@ public class Feip6v2ProtocolAnalysisData implements IAnalysisData {
         feip6v2.setProtocolNo(Integer.parseInt(value[1]));
         feip6v2.setProtocolVersion(value[2]);
         try{
-            feip6v2.setOption(Feip6v2Otption.acqureByValue(value[3]));
+            feip6v2.setOperation(Feip6v2Otption.acqureByValue(value[3]));
         }catch (Exception e){
             log.error("操作类型【{}】未知，直接跳过",value[3]);
             return;
@@ -77,16 +77,16 @@ public class Feip6v2ProtocolAnalysisData implements IAnalysisData {
             BeanUtils.copyProperties(feip6v2,tmp);
             tmp.setId(SnowflakeIdWorker.getUUID());
             tmp.setAuthToAddress(toAddr);
-            if(feip6v2.getOption() == Feip6v2Otption.AUTHORITION){
+            if(feip6v2.getOperation() == Feip6v2Otption.AUTHORITION){
                 feip6v2Dao.deleteAllByAuthFromAddressAndAuthToAddress(tmp.getAuthFromAddress(),tmp.getAuthToAddress());
                 feip6v2Dao.save(tmp);
-            }else if(feip6v2.getOption() == Feip6v2Otption.IRREVOCABLE_AUTHORITION){
+            }else if(feip6v2.getOperation() == Feip6v2Otption.IRREVOCABLE_AUTHORITION){
                 feip6v2Dao.deleteAllByAuthFromAddressAndAuthToAddress(tmp.getAuthFromAddress(),tmp.getAuthToAddress());
                 feip6v2Dao.save(tmp);
-            }else if(feip6v2.getOption() == Feip6v2Otption.DEPRIVATION){
+            }else if(feip6v2.getOperation() == Feip6v2Otption.DEPRIVATION){
                 feip6v2Dao.deleteAllByAuthFromAddressAndAuthToAddress(tmp.getAuthFromAddress(),tmp.getAuthToAddress());
             }else{
-                log.error("该操作:{},没有添加处理逻辑，联系管理员",tmp.getOption());
+                log.error("该操作:{},没有添加处理逻辑，联系管理员",tmp.getOperation());
             }
         }
     }

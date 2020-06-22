@@ -59,14 +59,14 @@ public class Knowledge implements Serializable {
     @Column(name = "title", columnDefinition = "varchar(200) comment '题目'")
     private String title;
 
-    @Column(name = "content", columnDefinition = "comment '内容'")
+    @Column(name = "content", columnDefinition = "longtext comment '内容'")
     @Lob
     private String content;
 
     @Column(name = "type", columnDefinition = "varchar(200) comment '类型'")
     private String type;
 
-    @Column(name = "create_date", columnDefinition = "comment '创建时间'")
+    @Column(name = "create_date", columnDefinition = "datetime comment '创建时间'")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createDate;
 }

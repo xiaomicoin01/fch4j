@@ -100,7 +100,12 @@ public class BlockSyncJob {
                 }
                 String[] temp = asm.split("\\s");
                 String protocolValue = HexStringUtil.hexStringToString(temp[1]);
-                analysisDataComponent.analysis(protocolValue, txid);
+                try{
+                    analysisDataComponent.analysis(protocolValue, txid);
+                }catch (Exception e){
+                    log.error("协议内容：{}，处理失败，信息为：{}",protocolValue,e.getMessage());
+                }
+
             }
         }
     }

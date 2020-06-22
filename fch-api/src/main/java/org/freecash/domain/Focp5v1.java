@@ -62,11 +62,11 @@ public class Focp5v1 implements Serializable {
 	@Column(name = "quoter", columnDefinition = "varchar(1000) comment '引用源'")
 	private String quoter;
 
-	@Column(name = "file", columnDefinition = "varchar(200) comment '文件'")
+	@Column(name = "file", columnDefinition = "longtext comment '文件'")
 	@Lob
 	private String file;
 
-	@Column(name = "create_date", columnDefinition = "comment '创建时间'")
+	@Column(name = "create_date", columnDefinition = "datetime comment '创建时间'")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createDate;
 

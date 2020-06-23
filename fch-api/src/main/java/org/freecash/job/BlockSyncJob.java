@@ -46,7 +46,7 @@ public class BlockSyncJob {
     @Resource
     private IFchVoutDao fchVoutDao;
 
-    private List<FchVout> outs = new ArrayList<>();
+    private Set<FchVout> outs = new HashSet<>();
 
     @Scheduled(cron = "${btc.job.corn}")
     @Transactional(rollbackFor = Exception.class)
@@ -148,5 +148,13 @@ public class BlockSyncJob {
             FchVout fchVout = new FchVout(txId,n);
             this.outs.remove(fchVout);
         }
+    }
+
+    public static void main(String[] args) {
+        Set<FchVout> outs = new HashSet<>();
+        outs.add(new FchVout("1","1","1",1,new BigDecimal("1")));
+        outs.add(new FchVout("2","2","1",1,new BigDecimal("1")));
+        outs.remove(new FchVout("3","2","1",1,new BigDecimal("1")));
+        System.out.println(outs);
     }
 }

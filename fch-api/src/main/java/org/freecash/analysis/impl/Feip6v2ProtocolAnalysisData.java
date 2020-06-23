@@ -73,6 +73,9 @@ public class Feip6v2ProtocolAnalysisData implements IAnalysisData {
 
         List<String> addresses = getOutAddress(txId);
         for (String toAddr : addresses){
+            if(Objects.equals(feip6v2.getAuthFromAddress(),toAddr)){
+                continue;
+            }
             Feip6v2 tmp = new Feip6v2();
             BeanUtils.copyProperties(feip6v2,tmp);
             tmp.setId(SnowflakeIdWorker.getUUID());

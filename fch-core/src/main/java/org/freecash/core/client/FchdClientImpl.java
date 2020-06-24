@@ -124,7 +124,7 @@ public class FchdClientImpl implements FchdClient {
 	public String createRawTransaction(List<OutputOverview> outputs,
                                        List<Map<String, Object>> param) throws FreecashException, CommunicationException {
 		List<Object> params = CollectionUtils.asList(outputs, param);
-		String hexTransactionJson = rpcClient.execute(Commands.CREATE_RAW_TRANSACTION.getName(), 
+		String hexTransactionJson = rpcClient.execute(Commands.CREATE_RAW_TRANSACTION.getName(),
 				params);
 		String hexTransaction = rpcClient.getParser().parseString(hexTransactionJson);
 		return hexTransaction;

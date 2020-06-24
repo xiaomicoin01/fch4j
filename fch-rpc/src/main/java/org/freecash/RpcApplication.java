@@ -32,4 +32,31 @@ public class RpcApplication {
         FchdClient client = new VerboseFchdClientImpl(httpProvider, nodeConfig);
         return client;
     }
+
+//    @Resource
+//    private FchdClient fchdClient;
+//
+//    @Bean
+//    public CommandLineRunner runner(){
+//        return args -> {
+//            List<OutputOverview> outs = Arrays.asList(
+//              new OutputOverview("7ec66ea4e7c07a30b2919cd6c9a51062d75b563bde94c5dc13fa0ee87538dca7",0)
+//            );
+//
+//            Map<String,Object> map11 = new HashMap<>();
+//            map11.put("FMp145T6LEUAieMCSbiuDAKuZ7bsKVw9re", new BigDecimal("0.01"));
+//            Map<String,Object> map12 = new HashMap<>();
+//            map12.put("FBCnVJ4hK99WcTJCb9DjK1zgufbageGTDq",new BigDecimal("0.10"));
+//
+//            Map<String,Object> map2 = new HashMap<>();
+//            map2.put("data", HexStringUtil.stringToHexString("123"));
+//
+//            List<Map<String,Object>> params = new ArrayList<>();
+//            params.add(map11);
+//            params.add(map12);
+//            params.add(map2);
+//            String hex = fchdClient.createRawTransaction(outs,params);
+//            System.out.println(hex);
+//        };
+//    }
 }

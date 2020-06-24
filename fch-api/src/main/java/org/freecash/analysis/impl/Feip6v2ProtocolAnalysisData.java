@@ -63,9 +63,12 @@ public class Feip6v2ProtocolAnalysisData implements IAnalysisData {
             log.error("操作类型【{}】未知，直接跳过",value[3]);
             return;
         }
-
-        feip6v2.setBeginDate(value[4]);
-        feip6v2.setEndDate(value[5]);
+        if(value.length > 4){
+            feip6v2.setBeginDate(value[4]);
+        }
+        if(value.length > 5){
+            feip6v2.setEndDate(value[5]);
+        }
         if(value.length > 6){
             feip6v2.setProtocolRange(value[6]);
         }

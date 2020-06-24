@@ -20,7 +20,7 @@ public enum Feip6v2Otption {
     /**
      * 永久授权
      */
-    IRREVOCABLE_AUTHORITION("irrevocable authorition","永久授权");
+    IRREVOCABLE_AUTHORITION("irrevocable_authorition","永久授权");
 
     private String value;
     private String desp;

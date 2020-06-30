@@ -1,6 +1,6 @@
 btc:
   job:
-    batch: 10
+    batch: 10000
     corn: 0 0/1 * * * ?
 
 rpc:

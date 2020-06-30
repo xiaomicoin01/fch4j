@@ -13,7 +13,6 @@ import org.freecash.core.domain.RawOutput;
 import org.freecash.core.domain.RawTransaction;
 import org.freecash.api.BlockApi;
 import org.freecash.constant.ConstantKey;
-import org.freecash.dao.IFchVoutDao;
 import org.freecash.domain.*;
 import org.freecash.service.*;
 import org.freecash.utils.HexStringUtil;
@@ -44,9 +43,10 @@ public class BlockSyncJob {
     @Resource
     private BlockApi client;
     @Resource
-    private IFchVoutDao fchVoutDao;
+    private FchVoutService fchVoutService;
 
-    private Set<FchVout> outs = new HashSet<>();
+    private Set<FchVout> saveOuts = new HashSet<>();
+    private Set<FchVout> delOuts = new HashSet<>();
 
     @Scheduled(cron = "${btc.job.corn}")
     @Transactional(rollbackFor = Exception.class)
@@ -72,9 +72,10 @@ public class BlockSyncJob {
             processBlock(hash);
         }
         info.setValue(Integer.toString(end));
-        fchVoutDao.saveAll(outs);
+        fchVoutService.saveAndDelete(delOuts,saveOuts);
+        delOuts.clear();
+        saveOuts.clear();
         blockInfoService.saveBlock(info);
-        this.outs.clear();
     }
 
     /**
@@ -109,12 +110,9 @@ public class BlockSyncJob {
                 }catch (Exception e){
                     log.error("协议内容：{}，处理失败，信息为：{}",protocolValue,e.getMessage());
                 }
-
             }
         }
     }
-
-
 
     private void processVoutAndVin(RawTransaction t){
         List<RawOutput> outputs = t.getVOut();
@@ -128,14 +126,16 @@ public class BlockSyncJob {
             if(addresses == null || addresses.size() == 0){
                 return;
             }
+
             FchVout fchVout = new FchVout(
                     SnowflakeIdWorker.getUUID(),
                     t.getTxId(),
                     addresses.get(0),
                     out.getN(),
-                    amount
+                    amount,
+                    false
             );
-            this.outs.add(fchVout);
+            this.saveOuts.add(fchVout);
         }
 
         for(RawInput input : t.getVIn()){
@@ -144,17 +144,11 @@ public class BlockSyncJob {
                 continue;
             }
             int n = input.getVOut();
-            fchVoutDao.deleteByTxIdAndN(txId,n);
-            FchVout fchVout = new FchVout(txId,n);
-            this.outs.remove(fchVout);
+            FchVout tmp = new FchVout(txId,n);
+            boolean contain = this.saveOuts.remove(tmp);
+            if(!contain){
+                this.delOuts.add(tmp);
+            }
         }
-    }
-
-    public static void main(String[] args) {
-        Set<FchVout> outs = new HashSet<>();
-        outs.add(new FchVout("1","1","1",1,new BigDecimal("1")));
-        outs.add(new FchVout("2","2","1",1,new BigDecimal("1")));
-        outs.remove(new FchVout("3","2","1",1,new BigDecimal("1")));
-        System.out.println(outs);
     }
 }

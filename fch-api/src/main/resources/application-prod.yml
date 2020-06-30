@@ -1,7 +1,7 @@
 btc:
   job:
-    batch: 1000
-    corn: 0 0/1 * * * ?
+    batch: 10000
+    corn: 0 * * * * ?
 
 rpc:
   protocol: http

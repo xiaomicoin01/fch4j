@@ -11,6 +11,7 @@ import org.freecash.domain.Feip3v2;
 import org.freecash.domain.Feip6v2;
 import org.freecash.domain.Feip6v2Otption;
 import org.freecash.domain.ProtocolHeader;
+import org.freecash.service.Feip6v2Service;
 import org.freecash.utils.SnowflakeIdWorker;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
@@ -29,7 +30,7 @@ public class Feip6v2ProtocolAnalysisData implements IAnalysisData {
     @Resource
     private FchdClient fchdClient;
     @Resource
-    private IFeip6v2Dao feip6v2Dao;
+    private Feip6v2Service feip6v2Service;
 
     /**
      * CID协议类型
@@ -84,13 +85,13 @@ public class Feip6v2ProtocolAnalysisData implements IAnalysisData {
             tmp.setId(SnowflakeIdWorker.getUUID());
             tmp.setAuthToAddress(toAddr);
             if(feip6v2.getOperation() == Feip6v2Otption.AUTHORITION){
-                feip6v2Dao.deleteAllByAuthFromAddressAndAuthToAddress(tmp.getAuthFromAddress(),tmp.getAuthToAddress());
-                feip6v2Dao.save(tmp);
+                feip6v2Service.delete(tmp.getAuthFromAddress(),tmp.getAuthToAddress());
+                feip6v2Service.save(tmp);
             }else if(feip6v2.getOperation() == Feip6v2Otption.IRREVOCABLE_AUTHORITION){
-                feip6v2Dao.deleteAllByAuthFromAddressAndAuthToAddress(tmp.getAuthFromAddress(),tmp.getAuthToAddress());
-                feip6v2Dao.save(tmp);
+                feip6v2Service.delete(tmp.getAuthFromAddress(),tmp.getAuthToAddress());
+                feip6v2Service.save(tmp);
             }else if(feip6v2.getOperation() == Feip6v2Otption.DEPRIVATION){
-                feip6v2Dao.deleteAllByAuthFromAddressAndAuthToAddress(tmp.getAuthFromAddress(),tmp.getAuthToAddress());
+                feip6v2Service.delete(tmp.getAuthFromAddress(),tmp.getAuthToAddress());
             }else{
                 log.error("该操作:{},没有添加处理逻辑，联系管理员",tmp.getOperation());
             }

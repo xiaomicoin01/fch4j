@@ -1,5 +1,6 @@
 package org.freecash.domain;
 
+import javassist.bytecode.annotation.BooleanMemberValue;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +19,7 @@ import java.util.Objects;
  * @date 2020-05-24 19:54:44
  */
 @Table(name = "fch_vout",indexes={
-        @Index(name = "IDX_Attachment_Id", columnList="txid,n",unique = true)
+        @Index(name = "txid_n", columnList="txid,n",unique = false)
 })
 @Entity
 @Data
@@ -44,6 +45,10 @@ public class FchVout implements Serializable {
 
     @Column(name = "amount",columnDefinition = "varchar(255) NULL DEFAULT NULL COMMENT '数量'")
     private BigDecimal amount;
+
+    @Column(name = "spent",columnDefinition = "int NULL DEFAULT 0 COMMENT '是否消费'")
+    @Type(type = "org.hibernate.type.NumericBooleanType")
+    private boolean spent;
 
     public FchVout(String txId, int n) {
         this.txId = txId;

@@ -16,7 +16,7 @@ import java.util.Date;
  * @date 2020-05-23 18:00:02
  */
  @Table(name="fch_feip6v2",indexes = {
- 		@Index(name="from_to",columnList = "auth_from_address,auth_to_address",unique = true)
+ 		@Index(name="from_to",columnList = "auth_from_address,auth_to_address",unique = false)
  })
  @Entity
  @Data

@@ -1,8 +1,10 @@
 btc:
   job:
     batch: 10000
-    corn: 0 0/1 * * * ?
-
+    corn: 0 * * * * ?
+    update:
+      corn: 0 * * * * ?
+      batch: 1000
 rpc:
   protocol: http
   host: 127.0.0.1
@@ -10,7 +12,7 @@ rpc:
   user: darkcoinrpc
   password: 123gfjk3R3pCCVjHtbRde2s5kzdf233sa
   scheme: Basic
-  
+
 server:
   port: 8081
 

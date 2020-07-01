@@ -2,7 +2,9 @@ btc:
   job:
     batch: 10000
     corn: 0 * * * * ?
-
+    update:
+      corn: 0 * * * * ?
+      batch: 1000
 rpc:
   protocol: http
   host: 111.229.195.222

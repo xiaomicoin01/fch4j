@@ -1,6 +1,6 @@
 package org.freecash.dao;
 
-import org.freecash.domain.FchVout;
+import org.freecash.domain.FchVin;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
@@ -8,7 +8,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
  * UTXO模型
  * @author wanglint
  */
-public interface IFchVoutDao extends PagingAndSortingRepository<FchVout, String>, JpaSpecificationExecutor<FchVout> {
+public interface IFchVinDao extends PagingAndSortingRepository<FchVin, String>, JpaSpecificationExecutor<FchVin> {
 
-    void deleteAllByTxIdAndN(String txId,Integer n);
 }

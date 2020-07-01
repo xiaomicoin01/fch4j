@@ -19,6 +19,7 @@ import org.freecash.utils.HexStringUtil;
 import org.freecash.utils.SnowflakeIdWorker;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -44,9 +45,8 @@ public class BlockSyncJob {
     private BlockApi client;
     @Resource
     private FchVoutService fchVoutService;
-
-    private Set<FchVout> saveOuts = new HashSet<>();
-    private Set<FchVout> delOuts = new HashSet<>();
+    @Resource
+    private FchVinService fchVinService;
 
     @Scheduled(cron = "${btc.job.corn}")
     @Transactional(rollbackFor = Exception.class)
@@ -66,65 +66,55 @@ public class BlockSyncJob {
             end = totalInWallet;
         }
 
+        Set<FchVin> vins = new HashSet<>();
+        Set<FchVout> vouts = new HashSet<>();
+
         for (int i = totalInDb + 1; i <= end; i++) {
             String hash = this.client.getBlockHash(i);
             log.debug("查询区块:" + i + ",hash=" + hash);
-            processBlock(hash);
-        }
-        info.setValue(Integer.toString(end));
-        fchVoutService.saveAndDelete(delOuts,saveOuts);
-        delOuts.clear();
-        saveOuts.clear();
-        blockInfoService.saveBlock(info);
-    }
 
-    /**
-     * 处理区块
-     *
-     * @param hash 区块的hash值
-     * @throws Exception
-     */
-    private void processBlock(String hash) throws Exception {
+            Block block = this.client.getBlock(hash);
 
-        Block block = (Block) this.client.getBlock(hash);
+            //保存区块信息
+            List<String> txIds = block.getTx();
+            for (String txid : txIds) {
+                RawTransaction t = this.client.getRawTransaction(txid, true);
 
-        //保存区块信息
-        List<String> txIds = block.getTx();
-        for (String txid : txIds) {
-            RawTransaction t = (RawTransaction) this.client.getRawTransaction(txid, true);
-
-            List<RawOutput> outputs = t.getVOut();
-            processVoutAndVin(t);
-            for (RawOutput out : outputs) {
-                String asm = out.getScriptPubKey().getAsm();
-                if (StringUtils.isEmpty(asm)) {
-                    continue;
-                }
-                if (!asm.startsWith(ConstantKey.OP_RETURN)) {
-                    continue;
-                }
-                String[] temp = asm.split("\\s");
-                String protocolValue = HexStringUtil.hexStringToString(temp[1]);
-                try{
-                    analysisDataComponent.analysis(protocolValue, txid);
-                }catch (Exception e){
-                    log.error("协议内容：{}，处理失败，信息为：{}",protocolValue,e.getMessage());
+                List<RawOutput> outputs = t.getVOut();
+                processVoutAndVin(t,vins,vouts);
+                for (RawOutput out : outputs) {
+                    String asm = out.getScriptPubKey().getAsm();
+                    if (StringUtils.isEmpty(asm)) {
+                        continue;
+                    }
+                    if (!asm.startsWith(ConstantKey.OP_RETURN)) {
+                        continue;
+                    }
+                    String[] temp = asm.split("\\s");
+                    String protocolValue = HexStringUtil.hexStringToString(temp[1]);
+                    try{
+                        analysisDataComponent.analysis(protocolValue, txid);
+                    }catch (Exception e){
+                        log.error("协议内容：{}，处理失败，信息为：{}",protocolValue,e.getMessage());
+                    }
                 }
             }
         }
+        info.setValue(Integer.toString(end));
+        blockInfoService.saveBlock(info);
+        vins.forEach(vin->{fchVinService.save(vin);});
+        vouts.forEach(vout->{fchVoutService.save(vout);});
     }
 
-    private void processVoutAndVin(RawTransaction t){
+    private void processVoutAndVin(RawTransaction t,Set<FchVin> vins,Set<FchVout> vouts){
         List<RawOutput> outputs = t.getVOut();
         for(RawOutput out : outputs){
             BigDecimal amount =  out.getValue();
-            if(Objects.equals(amount,BigDecimal.ZERO)){
-                return;
-            }
+
             List<String> addresses = out.getScriptPubKey().getAddresses();
 
             if(addresses == null || addresses.size() == 0){
-                return;
+                continue;
             }
 
             FchVout fchVout = new FchVout(
@@ -132,10 +122,9 @@ public class BlockSyncJob {
                     t.getTxId(),
                     addresses.get(0),
                     out.getN(),
-                    amount,
-                    false
+                    amount
             );
-            this.saveOuts.add(fchVout);
+            vouts.add(fchVout);
         }
 
         for(RawInput input : t.getVIn()){
@@ -144,11 +133,8 @@ public class BlockSyncJob {
                 continue;
             }
             int n = input.getVOut();
-            FchVout tmp = new FchVout(txId,n);
-            boolean contain = this.saveOuts.remove(tmp);
-            if(!contain){
-                this.delOuts.add(tmp);
-            }
+            FchVin tmp = new FchVin(SnowflakeIdWorker.getUUID(),txId,n);
+            vins.add(tmp);
         }
     }
 }

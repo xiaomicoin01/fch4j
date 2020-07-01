@@ -1,6 +1,5 @@
 package org.freecash.domain;
 
-import javassist.bytecode.annotation.BooleanMemberValue;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,7 +8,6 @@ import org.hibernate.annotations.Type;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -18,12 +16,12 @@ import java.util.Objects;
  * @author wanglin_自动生成
  * @date 2020-05-24 19:54:44
  */
-@Table(name = "fch_vout")
+@Table(name = "fch_vin")
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class FchVout implements Serializable {
+public class FchVin implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -35,24 +33,24 @@ public class FchVout implements Serializable {
     @Column(name = "txid",columnDefinition = " varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '交易ID'")
     private String txId;
 
-    @Column(name = "address",columnDefinition = " varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '地址'")
-    private String address;
-
     @Column(name = "n",columnDefinition = "int(11) NULL DEFAULT NULL COMMENT '索引'")
     private int n;
 
-    @Column(name = "amount",columnDefinition = "varchar(255) NULL DEFAULT NULL COMMENT '数量'")
-    private BigDecimal amount;
+    public FchVin(String txId, int n) {
+        this.txId = txId;
+        this.n = n;
+    }
+
 
     @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof FchVout)) {
+        if (!(o instanceof FchVin)) {
             return false;
         }
-        FchVout fchVout = (FchVout) o;
+        FchVin fchVout = (FchVin) o;
         return getN() == fchVout.getN() &&
                 Objects.equals(getTxId(), fchVout.getTxId());
     }

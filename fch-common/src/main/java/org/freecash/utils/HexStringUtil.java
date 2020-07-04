@@ -140,15 +140,13 @@ public class HexStringUtil {
     public static void main(String args[]) throws Exception {
 
         long s = System.currentTimeMillis();
+        System.out.println(hexStringToString("e8b4ade4b9b0464348"));
+
+
+//        s = System.currentTimeMillis();
 //        InputStream in = new FileInputStream("E:\\需求\\进行中\\888diss\\img\\1.png");
-//        String hex = fileToHex(in);
+//        byte[] b = IOUtils.toByteArray(in);
+//        //System.out.println(byte2HexStr(b));
 //        System.out.println(System.currentTimeMillis() -s);
-
-
-        s = System.currentTimeMillis();
-        InputStream in = new FileInputStream("E:\\需求\\进行中\\888diss\\img\\1.png");
-        byte[] b = IOUtils.toByteArray(in);
-        //System.out.println(byte2HexStr(b));
-        System.out.println(System.currentTimeMillis() -s);
     }
 }

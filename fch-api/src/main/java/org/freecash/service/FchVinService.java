@@ -26,7 +26,7 @@ public class FchVinService {
     }
 
     public void delete(FchVin fchVin){
-        this.fchVinDao.delete(fchVin);
+        this.fchVinDao.deleteById(fchVin.getPid());
     }
 
     public List<FchVin> find(PageRequest page){

@@ -59,7 +59,7 @@ public class Feip6v2ProtocolAnalysisData implements IAnalysisData {
         feip6v2.setProtocolNo(Integer.parseInt(value[1]));
         feip6v2.setProtocolVersion(value[2]);
         try{
-            feip6v2.setOperation(Feip6v2Otption.acqureByValue(value[3]));
+            feip6v2.setOperation(Feip6v2Otption.acqureByValue(value[3].toLowerCase()));
         }catch (Exception e){
             log.error("操作类型【{}】未知，直接跳过",value[3]);
             return;

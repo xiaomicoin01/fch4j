@@ -33,13 +33,16 @@ public class UtxoUpdateJob {
     private int batch;
 
     @Scheduled(cron = "${btc.job.update.corn}")
-    @Transactional
+    @Transactional(rollbackOn = Exception.class)
     public void updateUtxo(){
+
         PageRequest p = PageRequest.of(0,batch);
         List<FchVin> vinList = this.fchVinService.find(p);
+        log.debug("开始删除使用过的UTXO:共{}条",vinList.size());
         for (FchVin vin: vinList ) {
             this.fchVoutService.delete(vin.getTxId(),vin.getN());
             this.fchVinService.delete(vin);
         }
+        log.debug("删除完毕");
     }
 }

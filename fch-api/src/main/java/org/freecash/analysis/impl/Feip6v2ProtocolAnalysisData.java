@@ -3,6 +3,7 @@ package org.freecash.analysis.impl;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.freecash.analysis.IAnalysisData;
+import org.freecash.config.FreecashConfig;
 import org.freecash.core.client.FchdClient;
 import org.freecash.core.domain.*;
 import org.freecash.dao.IFeip3v2Dao;
@@ -13,12 +14,15 @@ import org.freecash.domain.Feip6v2Otption;
 import org.freecash.domain.ProtocolHeader;
 import org.freecash.service.Feip6v2Service;
 import org.freecash.utils.SnowflakeIdWorker;
+import org.freecash.utils.StringUtil;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author wanglint
@@ -27,6 +31,8 @@ import java.util.*;
 @Component
 @Log4j2
 public class Feip6v2ProtocolAnalysisData implements IAnalysisData {
+    @Resource
+    private FreecashConfig config;
     @Resource
     private FchdClient fchdClient;
     @Resource
@@ -76,22 +82,72 @@ public class Feip6v2ProtocolAnalysisData implements IAnalysisData {
         feip6v2.setAuthFromAddress(address);
 
         List<String> addresses = getOutAddress(txId);
+        addresses.remove(feip6v2.getAuthFromAddress());
+        if(CollectionUtils.isEmpty(addresses)){
+            feip6v2Service.delete(feip6v2.getAuthFromAddress());
+            return;
+        }
         for (String toAddr : addresses){
-            if(Objects.equals(feip6v2.getAuthFromAddress(),toAddr)){
-                continue;
-            }
             Feip6v2 tmp = new Feip6v2();
             BeanUtils.copyProperties(feip6v2,tmp);
             tmp.setId(SnowflakeIdWorker.getUUID());
             tmp.setAuthToAddress(toAddr);
+            List<Feip6v2> feip6v2s = feip6v2Service.getFeip6v2(tmp.getAuthFromAddress(),tmp.getAuthToAddress());
             if(feip6v2.getOperation() == Feip6v2Otption.AUTHORITION){
-                feip6v2Service.delete(tmp.getAuthFromAddress(),tmp.getAuthToAddress());
-                feip6v2Service.save(tmp);
+                if(!CollectionUtils.isEmpty(feip6v2s)){
+                    Feip6v2 feip6v21 = feip6v2s.get(0);
+                    feip6v21.setBeginDate(tmp.getBeginDate());
+                    feip6v21.setEndDate(tmp.getEndDate());
+                    if(StringUtil.isEmpty(tmp.getProtocolRange())){
+                        feip6v21.setProtocolRange("");
+                    }else{
+                        feip6v21.setProtocolRange(feip6v2.getProtocolRange()+"#"+tmp.getProtocolRange());
+                    }
+                    feip6v2Service.save(feip6v21);
+                }else{
+                    feip6v2Service.save(tmp);
+                }
+
             }else if(feip6v2.getOperation() == Feip6v2Otption.IRREVOCABLE_AUTHORITION){
                 feip6v2Service.delete(tmp.getAuthFromAddress(),tmp.getAuthToAddress());
                 feip6v2Service.save(tmp);
             }else if(feip6v2.getOperation() == Feip6v2Otption.DEPRIVATION){
-                feip6v2Service.delete(tmp.getAuthFromAddress(),tmp.getAuthToAddress());
+                if(!CollectionUtils.isEmpty(feip6v2s)){
+                    Feip6v2 feip6v21 = feip6v2s.get(0);
+                    Set<String> protocols = Arrays.stream(feip6v21.getProtocolRange().split("#")).map(item->{
+                        item = item.replaceAll(",","");
+                        return item;
+                    }).collect(Collectors.toSet());
+
+                    Set<String> rmProtocols = Arrays.stream(tmp.getProtocolRange().split("#")).map(item->{
+                        item = item.replaceAll(",","");
+                        return item;
+                    }).collect(Collectors.toSet());
+
+                    if(CollectionUtils.isEmpty(rmProtocols)){
+                        feip6v2Service.delete(tmp.getAuthFromAddress(),tmp.getAuthToAddress());
+                    }else if(!CollectionUtils.isEmpty(rmProtocols) && CollectionUtils.isEmpty(protocols)){
+                        protocols = new HashSet<>(config.getProtocols());
+                        protocols.removeAll(rmProtocols);
+                        if(CollectionUtils.isEmpty(protocols)){
+                            feip6v2Service.delete(tmp.getAuthFromAddress(),tmp.getAuthToAddress());
+                        }else{
+                            feip6v21.setProtocolRange(String.join("#",protocols.toArray(new String[0])));
+                            feip6v2Service.save(feip6v21);
+                        }
+                    }else if(!CollectionUtils.isEmpty(rmProtocols) && !CollectionUtils.isEmpty(protocols)){
+                        protocols.removeAll(rmProtocols);
+                        if(CollectionUtils.isEmpty(protocols)){
+                            feip6v2Service.delete(tmp.getAuthFromAddress(),tmp.getAuthToAddress());
+                        }else{
+                            feip6v21.setProtocolRange(String.join("#",protocols.toArray(new String[0])));
+                            feip6v2Service.save(feip6v21);
+                        }
+                    }
+                }else{
+                    log.warn("未做授权就做解除权限操作非法，直接忽略");
+                }
+
             }else{
                 log.error("该操作:{},没有添加处理逻辑，联系管理员",tmp.getOperation());
             }

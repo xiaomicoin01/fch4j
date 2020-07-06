@@ -2,12 +2,14 @@ package org.freecash.service;
 
 import org.freecash.dao.IFeip3v2Dao;
 import org.freecash.dao.IFeip6v2Dao;
+import org.freecash.domain.Feip1v3;
 import org.freecash.domain.Feip3v2;
 import org.freecash.domain.Feip6v2;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,5 +29,14 @@ public class Feip6v2Service {
     @Transactional(rollbackOn = Exception.class)
     public void delete(String fromAddress, String toAddress){
         feip6v2Dao.deleteAllByAuthFromAddressAndAuthToAddress(fromAddress,toAddress);
+    }
+
+    @Transactional(rollbackOn = Exception.class)
+    public void delete(String fromAddress){
+        feip6v2Dao.deleteAllByAuthFromAddress(fromAddress);
+    }
+
+    public List<Feip6v2> getFeip6v2(String fromAddr,String toAddr){
+        return feip6v2Dao.findAllByAuthFromAddressAndAuthToAddress(fromAddr,toAddr).orElse(new ArrayList<>());
     }
 }

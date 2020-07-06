@@ -42,3 +42,25 @@ freecash:
     update: http://freedrive.fchwallet.com:8442/api/update
     get: http://freedrive.fchwallet.com:8442/api/get
     getDriveId: http://freedrive.fchwallet.com:8442/api/get_drive_id
+  protocols:
+    - FIPA1
+    - FIPA2
+    - FEIP1
+    - FEIP2
+    - FEIP3
+    - FEIP4
+    - FEIP5
+    - FEIP6
+    - FEIP7
+    - FEIP8
+    - FEIP9
+    - FEIP10
+    - FEIP11
+    - FEIP12
+    - FEIP15
+    - FEIP16
+    - FOCP1
+    - FOCP2
+    - FOCP3
+    - FOCP4
+    - FOCP5

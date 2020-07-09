@@ -34,7 +34,7 @@ public class ProtocolUtil {
             String value = Objects.isNull(item.getValue()) ? "" : item.getValue();
             int len = item.getByteLength();
             String valueHex = HexStringUtil.stringToHexString(value);
-            String valueHexLen = HexStringUtil.integerToHex(valueHex.length(),len);
+            String valueHexLen = HexStringUtil.integerToHex(valueHex.length()/2,len);
             sb.append(valueHexLen).append(valueHex);
         }
         return sb.toString();
@@ -50,7 +50,7 @@ public class ProtocolUtil {
             String tmp = hexStr.substring(sIndex,eIndex);
             int contentLen = HexStringUtil.hexToInteger(tmp);
             sIndex = eIndex;
-            eIndex += contentLen;
+            eIndex += contentLen*2;
             tmp = hexStr.substring(sIndex,eIndex);
             tmp = HexStringUtil.hexStringToString(tmp);
             sIndex = eIndex;
@@ -76,43 +76,16 @@ public class ProtocolUtil {
     }
 
     public static void main(String[] args) {
-//        int AUTHOR_LENGTH = 2;
-//        int TYPE_LENGTH = 2;
-//        int TITLE_LENGTH = 3;
-//        int CONTENT_LENGTH = 8;
-//        ProtocolUtil.EncodeItem author = new ProtocolUtil.EncodeItem("张三",AUTHOR_LENGTH);
-//        ProtocolUtil.EncodeItem type = new ProtocolUtil.EncodeItem("DEFINITION",TYPE_LENGTH);
-//        ProtocolUtil.EncodeItem title = new ProtocolUtil.EncodeItem("测试",TITLE_LENGTH);
-//        ProtocolUtil.EncodeItem content = new ProtocolUtil.EncodeItem("看一下效果",CONTENT_LENGTH);
-//        String data1 = ProtocolUtil.encodeValue(Arrays.asList(author,type,title,content));
-//
-//        System.out.println(data1);
+        ProtocolUtil.EncodeItem author = new ProtocolUtil.EncodeItem("1",4);
+        ProtocolUtil.EncodeItem type = new ProtocolUtil.EncodeItem("1234",4);
+        String data1 = ProtocolUtil.encodeValue(Arrays.asList(author,type));
 
-        System.out.println("-------------------------");
-        String data1 = "0012616161615f47544471000a4553534159000012e68891e79a844643480000000000000138dadae5958ae5958ae5958ae5958ae5958ae5958ae5958ae5958ae5958ae5958ae5958ae5958ae5958ae5958ae5958ae5958ae5958ae5958ae5958ae5958ae5958ae5958ae5958ae5958ae5958ae5958ae5958ae5958ae5958ae5958ae5958adadadada215b5d286672656564726976653a313233343529dadadadada2020202020202020202020202020202020202020202020202020202020202020";
-        List<String> res = ProtocolUtil.decodeValue(data1,Arrays.asList(2,2,3,8));
+        System.out.println(data1);
+        List<String> res = ProtocolUtil.decodeValue(data1,Arrays.asList(4,4));
         System.out.println(res);
-        System.out.println("-------------------------");
 
-//        String meateData =org.freecash.utils.ProtocolUtil.encodeValue(Arrays.asList(
-//                new org.freecash.utils.ProtocolUtil.EncodeItem("FOCP", 1),
-//                new org.freecash.utils.ProtocolUtil.EncodeItem("3",1),
-//                new org.freecash.utils.ProtocolUtil.EncodeItem("3",1),
-//                new org.freecash.utils.ProtocolUtil.EncodeItem("CREATE",1),
-//                new org.freecash.utils.ProtocolUtil.EncodeItem("90cc1020b584e988d54772620209746f83476ef10f2d46c733b9be89754636e3",2),
-//                new org.freecash.utils.ProtocolUtil.EncodeItem("",2),
-//                new org.freecash.utils.ProtocolUtil.EncodeItem("",3),
-//                new org.freecash.utils.ProtocolUtil.EncodeItem("ar",2),
-//                new org.freecash.utils.ProtocolUtil.EncodeItem("",2)
-//        ));
-//
-//
-//        System.out.println(meateData);
-
-        System.out.println("-------------------------");
-        String meateData = "08464f4350023302330c4352454154450080393863623233623262653433386531313961373530343833303733353266363264666238643235343866373039363165323362346436643535666537343664320000000000000a7a682d636e0000";
-        res = ProtocolUtil.decodeValue(meateData,Arrays.asList(1,1,1,1,2,2,3,2,2));
+        String meateData = "04464f435001330133064352454154454061623365396238366233343230366461336535333736633135633661323530386332343065383436616466366437306161343964316237393938396137383032000000057a682d636e00";
+        res = ProtocolUtil.decodeValue(meateData,Arrays.asList(1,1,1,1,1,1,2,1,1));
         System.out.println(res);
-        System.out.println("-------------------------");
     }
 }

@@ -19,8 +19,8 @@ public class FchVoutService {
         return this.fchVoutDao.save(fchVout);
     }
 
-    public void delete(String txId, int n){
-        this.fchVoutDao.deleteAllByTxIdAndN(txId,n);
+    public int delete(String txId, int n){
+        return this.fchVoutDao.deleteAllByTxIdAndN(txId,n);
     }
 
 }

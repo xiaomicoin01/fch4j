@@ -140,7 +140,7 @@ public class HexStringUtil {
     public static void main(String args[]) throws Exception {
 
         long s = System.currentTimeMillis();
-        System.out.println(hexStringToString("e8b4ade4b9b0464348"));
+        System.out.println(hexStringToString("464549507c337c327c6d61737465727c2373656c667c7c"));
 
 
 //        s = System.currentTimeMillis();

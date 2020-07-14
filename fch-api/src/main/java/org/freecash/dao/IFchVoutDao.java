@@ -10,5 +10,5 @@ import org.springframework.data.repository.PagingAndSortingRepository;
  */
 public interface IFchVoutDao extends PagingAndSortingRepository<FchVout, String>, JpaSpecificationExecutor<FchVout> {
 
-    void deleteAllByTxIdAndN(String txId,Integer n);
+    int deleteAllByTxIdAndN(String txId, Integer n);
 }

@@ -40,8 +40,10 @@ public class UtxoUpdateJob {
         List<FchVin> vinList = this.fchVinService.find(p);
         log.debug("开始删除使用过的UTXO:共{}条",vinList.size());
         for (FchVin vin: vinList ) {
-            this.fchVoutService.delete(vin.getTxId(),vin.getN());
-            this.fchVinService.delete(vin);
+            int res = this.fchVoutService.delete(vin.getTxId(),vin.getN());
+            if(res>0){
+                this.fchVinService.delete(vin);
+            }
         }
         log.debug("删除完毕");
     }

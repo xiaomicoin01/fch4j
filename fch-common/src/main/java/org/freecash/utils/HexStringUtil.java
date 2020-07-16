@@ -3,6 +3,7 @@ package org.freecash.utils;
 import org.apache.commons.io.IOUtils;
 
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
@@ -94,7 +95,7 @@ public class HexStringUtil {
 
         byte[] result = bos.toByteArray();
         // 字节数组转成十六进制
-        String str = byte2HexStr(result);
+        String str = byteToHex(result);
         return str;
     }
 
@@ -102,12 +103,8 @@ public class HexStringUtil {
         if (src == null || src.length() == 0) {
             return;
         }
-
-        byte[] bytes = src.getBytes();
-        for (int i = 0; i < bytes.length; i += 2) {
-            out.write(charToInt(bytes[i]) * 16 + charToInt(bytes[i + 1]));
-        }
-
+        byte[] bytes = hexToByte(src);
+        IOUtils.write(bytes,out);
     }
 
     private static int charToInt(byte ch) {
@@ -120,33 +117,57 @@ public class HexStringUtil {
         return val;
     }
 
-
-    public static String byte2HexStr(byte[] b) {
-        StringBuilder hs = new StringBuilder();
-        String stmp = "";
-
-        for (int n = 0; n < b.length; n++) {
-            stmp = (Integer.toHexString(b[n] & 0XFF));
-            if (stmp.length() == 1) {
-                hs.append("0" + stmp);
-            } else {
-                hs.append(stmp);
-            }
+    /**
+     * byte数组转hex
+     * @param bytes
+     * @return
+     */
+    public static String byteToHex(byte[] bytes){
+        String strHex = "";
+        StringBuilder sb = new StringBuilder("");
+        for (int n = 0; n < bytes.length; n++) {
+            strHex = Integer.toHexString(bytes[n] & 0xFF);
+            sb.append((strHex.length() == 1) ? "0" + strHex : strHex);
         }
-        return hs.toString().toUpperCase();
+        return sb.toString().trim();
+    }
+
+    public static byte[] hexToByte(String hex){
+        int m = 0, n = 0;
+        int byteLen = hex.length() / 2; // 每两个字符描述一个字节
+        byte[] ret = new byte[byteLen];
+        for (int i = 0; i < byteLen; i++) {
+            m = i * 2 + 1;
+            n = m + 1;
+            int intVal = Integer.decode("0x" + hex.substring(i * 2, m) + hex.substring(m, n));
+            ret[i] = Byte.valueOf((byte)intVal);
+        }
+        return ret;
     }
 
 
     public static void main(String args[]) throws Exception {
+        String src="我是你大爷";
+        System.out.println(byteToHex(src.getBytes()));
+        InputStream in =  new FileInputStream("C:\\Users\\wanglint\\Desktop\\培训问题.txt");
 
-        long s = System.currentTimeMillis();
-        System.out.println(hexStringToString("464549507c337c327c6d61737465727c2373656c667c7c"));
+        StringBuffer sb = new StringBuffer();
+        java.io.ByteArrayOutputStream bos = new java.io.ByteArrayOutputStream();
 
+        byte[] buffer = new byte[1024];
+        int read = 1024;
+        int readSize = 1024;
+        while (read == readSize) {
+            read = in.read(buffer, 0, readSize);
+            bos.write(buffer, 0, read);
+        }
 
-//        s = System.currentTimeMillis();
-//        InputStream in = new FileInputStream("E:\\需求\\进行中\\888diss\\img\\1.png");
-//        byte[] b = IOUtils.toByteArray(in);
-//        //System.out.println(byte2HexStr(b));
-//        System.out.println(System.currentTimeMillis() -s);
+        byte[] result = bos.toByteArray();
+
+        String hex = byteToHex(result);
+        System.out.println(hex);
+
+        result = hexToByte(hex);
+        IOUtils.write(result,new FileOutputStream("C:\\Users\\wanglint\\Desktop\\培训问题.json"));
     }
 }

@@ -38,13 +38,13 @@ public class UtxoUpdateJob {
 
         PageRequest p = PageRequest.of(0,batch);
         List<FchVin> vinList = this.fchVinService.find(p);
-        log.debug("开始删除使用过的UTXO:共{}条",vinList.size());
+        //log.debug("开始删除使用过的UTXO:共{}条",vinList.size());
         for (FchVin vin: vinList ) {
             int res = this.fchVoutService.delete(vin.getTxId(),vin.getN());
             if(res>0){
                 this.fchVinService.delete(vin);
             }
         }
-        log.debug("删除完毕");
+        //log.debug("删除完毕");
     }
 }

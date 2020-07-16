@@ -21,45 +21,31 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-public class HttpClientCommpont {
-    static CloseableHttpClient httpclient;
-    static int timeOut = 60000;
-    static int maxConnTotal = 1000;
+/**
+ * @author wanglint
+ */
+public class HttpClientComponent {
+    private static CloseableHttpClient httpclient;
 
     static {
-//        RequestConfig requestConfig = RequestConfig //请求设置
-//                .custom()
-//                .setConnectionRequestTimeout(60000) //从连接池获取连接超时时间
-//                .setConnectTimeout(60000) //连接超时时间
-//                .setSocketTimeout(60000).build(); //套接字超时时间
 
-        ConnectionKeepAliveStrategy myStrategy = new ConnectionKeepAliveStrategy() {
-            @Override
-            public long getKeepAliveDuration(HttpResponse response, HttpContext context) {
+        ConnectionKeepAliveStrategy myStrategy = (HttpResponse response, HttpContext context)-> {
                 HeaderElementIterator it = new BasicHeaderElementIterator
                         (response.headerIterator(HTTP.CONN_KEEP_ALIVE));
                 while (it.hasNext()) {
                     HeaderElement he = it.nextElement();
                     String param = he.getName();
                     String value = he.getValue();
-                    if (value != null && param.equalsIgnoreCase
-                            ("timeout")) {
+                    if (value != null && "timeout".equalsIgnoreCase(param)) {
                         return Long.parseLong(value) * 1000;
                     }
                 }
-                return 60 * 1000;//如果没有约定，则默认定义时长为60s
-            }
+                return 60 * 1000;
         };
 
         PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
-        connectionManager.setMaxTotal(maxConnTotal);
+        connectionManager.setMaxTotal(1000);
         connectionManager.setDefaultMaxPerRoute(50);
-
-//        HttpClientBuilder builder = HttpClients.custom()
-//                .setDefaultRequestConfig(requestConfig)
-//                .setKeepAliveStrategy(myStrategy)
-//                .setMaxConnTotal(maxConnTotal); //设置最大连接数
-//        httpclient = builder.build();
 
         httpclient = HttpClients.custom()
                 .setConnectionManager(connectionManager)
@@ -74,7 +60,7 @@ public class HttpClientCommpont {
         RequestConfig requestConfig = RequestConfig.custom()
                 .setSocketTimeout(timeOut)
                 .setConnectionRequestTimeout(timeOut)
-                .setConnectTimeout(timeOut).build();//设置请求和传输超时时间
+                .setConnectTimeout(timeOut).build();
         return requestConfig;
     }
 
@@ -82,7 +68,7 @@ public class HttpClientCommpont {
      * 发送json数据
      * @param url 地址
      * @param jsonData json字符串
-     * @return
+     * @return httpPost
      */
     public static HttpPost getPostForJson(String url, String jsonData){
         HttpPost httpPost = new HttpPost(url);
@@ -95,13 +81,13 @@ public class HttpClientCommpont {
     /**
      * 发送json数据
      * @param url 地址
-     * @param jsonData json字符串
-     * @return
+     * @param paramMap 参数
+     * @return HttpPost
      */
     public static HttpPost getPostForMap(String url, Map<String,Object> paramMap) throws Exception{
         HttpPost httpPost = new HttpPost(url);
 
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        List<NameValuePair> params = new ArrayList<>();
         paramMap.forEach((k,v)->{
             if(Objects.isNull(v)){
                 params.add(new BasicNameValuePair(k,""));
@@ -135,8 +121,6 @@ public class HttpClientCommpont {
             if (response != null) {
                 ((CloseableHttpResponse) response).close();
             }
-            //httpclient.close();
-            //httpclient.getConnectionManager().shutdown();
         }
     }
 }
@@ -157,15 +141,12 @@ class IdleConnectionMonitorThread extends Thread {
             while (!shutdown) {
                 synchronized (this) {
                     wait(5000);
-                    // Close expired connections
                     connMgr.closeExpiredConnections();
-                    // Optionally, close connections
-                    // that have been idle longer than 30 sec
                     connMgr.closeIdleConnections(30, TimeUnit.SECONDS);
                 }
             }
         } catch (InterruptedException ex) {
-            // terminate
+            shutdown();
         }
     }
 

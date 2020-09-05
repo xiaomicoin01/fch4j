@@ -7,7 +7,7 @@ btc:
       batch: 1000
 rpc:
   protocol: http
-  host: 127.0.0.1
+  host: 114.116.246.226
   port: 34452
   user: darkcoinrpc
   password: 123gfjk3R3pCCVjHtbRde2s5kzdf233sa
@@ -18,7 +18,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/tbl?charset=utf8mb4&useSSL=false
+    url: jdbc:mysql://localhost:3306/tbl?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
     username: root
     password: root
     driver-class-name: com.mysql.jdbc.Driver
@@ -39,10 +39,11 @@ freecash:
   address: FAxNcqAvdjMd9nhdzpggXn2Tu6khQTzjmr
   fee: 0.0001
   freedrive:
-    put: http://freedrive.fchwallet.com:8442/api/put
-    update: http://freedrive.fchwallet.com:8442/api/update
-    get: http://freedrive.fchwallet.com:8442/api/get
-    getDriveId: http://freedrive.fchwallet.com:8442/api/get_drive_id
+    put: https://open.api.qingniao.cloud/api/put
+    get: https://open.api.qingniao.cloud/api/get
+    list: https://open.api.qingniao.cloud/api/list
+    get_drive_info: https://open.api.qingniao.cloud/api/get_drive_info
+    auth: https://open.api.qingniao.cloud/api/auth
   protocols:
     - FIPA1
     - FIPA2

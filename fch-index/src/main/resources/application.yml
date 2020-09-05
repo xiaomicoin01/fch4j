@@ -1,0 +1,11 @@
+index:
+  init: true
+  url: https://open.lixinger.com/api/a/index/fundamental
+  token: 384f552b-9c6e-46e4-84d6-b5357fb18981
+  beginDate: 2009-01-01
+  stockCodes:
+    - "000016"
+  metricsList:
+    - pe_ttm.y10.mcw
+    - pb.y10.mcw
+    - mc

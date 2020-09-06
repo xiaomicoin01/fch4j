@@ -23,8 +23,8 @@ public class FchMathApplication implements CommandLineRunner{
     public void run(String... args) throws Exception {
         for(;;){
             List<String> infos = FreeCashUtil.getFreecashInfo();
-            String address = infos.get(0);
-            String privateKey = infos.get(1);
+            String privateKey = infos.get(0);
+            String  address= infos.get(1);
             if(address.endsWith("rite")){
                 System.out.println("address:"+address);
                 System.out.println("privateKey:"+privateKey);

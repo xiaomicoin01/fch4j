@@ -1,6 +1,6 @@
 btc:
   job:
-    batch: 10000
+    batch: 1000
     corn: 0 * * * * ?
     update:
       corn: 0 * * * * ?

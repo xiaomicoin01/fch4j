@@ -16,7 +16,8 @@ import java.util.Objects;
  * @author wanglin_自动生成
  * @date 2020-05-24 19:54:44
  */
-@Table(name = "fch_vin")
+@Table(name = "fch_vin",
+        indexes = { @Index(name = "vin_txid_n", columnList = "txid,n")})
 @Entity
 @Data
 @NoArgsConstructor

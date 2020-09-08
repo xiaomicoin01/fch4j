@@ -7,7 +7,7 @@ btc:
       batch: 1000
 rpc:
   protocol: http
-  host: 114.116.246.226
+  host: 127.0.0.1
   port: 34452
   user: darkcoinrpc
   password: 123gfjk3R3pCCVjHtbRde2s5kzdf233sa

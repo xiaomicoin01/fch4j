@@ -3,6 +3,7 @@ package org.freecash.analysis.impl;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.freecash.analysis.IAnalysisData;
+import org.freecash.component.FreecashComponent;
 import org.freecash.config.FreecashConfig;
 import org.freecash.core.client.FchdClient;
 import org.freecash.core.domain.*;
@@ -34,7 +35,7 @@ public class Feip6v2ProtocolAnalysisData implements IAnalysisData {
     @Resource
     private FreecashConfig config;
     @Resource
-    private FchdClient fchdClient;
+    private FreecashComponent freecashComponent;
     @Resource
     private Feip6v2Service feip6v2Service;
 
@@ -57,7 +58,7 @@ public class Feip6v2ProtocolAnalysisData implements IAnalysisData {
      */
     @Override
     public void analysis(String protocolValue,String txId) throws Exception{
-        String address = getBindAddress(txId);
+        String address = freecashComponent.getBindAddress(txId);
         String[] value = protocolValue.split("\\|");
         Feip6v2 feip6v2 = new Feip6v2();
 
@@ -81,7 +82,7 @@ public class Feip6v2ProtocolAnalysisData implements IAnalysisData {
         }
         feip6v2.setAuthFromAddress(address);
 
-        List<String> addresses = getOutAddress(txId);
+        List<String> addresses = freecashComponent.getOutAddress(txId);
         addresses.remove(feip6v2.getAuthFromAddress());
         if(CollectionUtils.isEmpty(addresses)){
             feip6v2Service.delete(feip6v2.getAuthFromAddress());
@@ -154,28 +155,4 @@ public class Feip6v2ProtocolAnalysisData implements IAnalysisData {
         }
     }
 
-    private String getBindAddress(String txId) throws Exception{
-        RawTransaction rawTransaction = (RawTransaction)fchdClient.getRawTransaction(txId,true);
-        RawInput rawInput = rawTransaction.getVIn().get(0);
-        String id = rawInput.getTxId();
-        int vout = rawInput.getVOut();
-
-        rawTransaction = (RawTransaction)fchdClient.getRawTransaction(id,true);
-        RawOutput rawOutput = rawTransaction.getVOut().get(vout);
-        return rawOutput.getScriptPubKey().getAddresses().get(0);
-    }
-
-    private List<String> getOutAddress(String txId) throws Exception{
-        RawTransaction rawTransaction = (RawTransaction)fchdClient.getRawTransaction(txId,true);
-
-        List<RawOutput> rawOutput = rawTransaction.getVOut();
-        List<String> res = new ArrayList<>();
-        rawOutput.forEach(item->{
-            List<String> addresses = item.getScriptPubKey().getAddresses();
-            if(Objects.nonNull(addresses)){
-                res.addAll(addresses);
-            }
-        });
-        return res;
-    }
 }

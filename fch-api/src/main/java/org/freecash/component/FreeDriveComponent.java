@@ -18,7 +18,7 @@ import java.util.Map;
  **/
 @Component
 @Log4j2
-public class FreeDriveComponnet {
+public class FreeDriveComponent {
     @Value("${freecash.freedrive.get}")
     private String getUrl;
 

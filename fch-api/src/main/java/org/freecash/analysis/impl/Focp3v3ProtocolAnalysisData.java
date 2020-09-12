@@ -2,7 +2,7 @@ package org.freecash.analysis.impl;
 
 import lombok.extern.log4j.Log4j2;
 import org.freecash.analysis.IAnalysisData;
-import org.freecash.component.FreeDriveComponnet;
+import org.freecash.component.FreeDriveComponent;
 import org.freecash.core.client.FchdClient;
 import org.freecash.core.domain.RawInput;
 import org.freecash.core.domain.RawTransaction;
@@ -36,7 +36,7 @@ public class Focp3v3ProtocolAnalysisData implements IAnalysisData {
     @Resource
     private IKnowledgeDao knowledgeDao;
     @Resource
-    private FreeDriveComponnet freeDriveComponnet;
+    private FreeDriveComponent freeDriveComponent;
 
     /**
      * CID协议类型
@@ -74,7 +74,7 @@ public class Focp3v3ProtocolAnalysisData implements IAnalysisData {
 
         try {
             String address = getAddress(txId);
-            FreeDriveGetResponse response = freeDriveComponnet.put(new FreeDriveGetRequest(address,f.getFilePath()));
+            FreeDriveGetResponse response = freeDriveComponent.put(new FreeDriveGetRequest(address,f.getFilePath()));
 
             Knowledge knowledge = new Knowledge();
             knowledge.setId(SnowflakeIdWorker.getUUID());

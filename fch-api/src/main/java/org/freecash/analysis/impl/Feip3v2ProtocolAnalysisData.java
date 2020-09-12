@@ -3,6 +3,7 @@ package org.freecash.analysis.impl;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.freecash.analysis.IAnalysisData;
+import org.freecash.component.FreecashComponent;
 import org.freecash.core.client.FchdClient;
 import org.freecash.core.domain.RawInput;
 import org.freecash.core.domain.RawOutput;
@@ -29,7 +30,7 @@ import java.util.Objects;
 @Log4j2
 public class Feip3v2ProtocolAnalysisData implements IAnalysisData {
     @Resource
-    private FchdClient fchdClient;
+    private FreecashComponent freecashComponent;
     @Resource
     private IFeip3v2Dao feip3v2Dao;
 
@@ -53,7 +54,7 @@ public class Feip3v2ProtocolAnalysisData implements IAnalysisData {
      */
     @Override
     public void analysis(String protocolValue,String txId) throws Exception{
-        String address = getBindAddress(txId);
+        String address = freecashComponent.getBindAddress(txId);
         String[] value = protocolValue.split("\\|");
         List<Feip3v2> feip3v2 = feip3v2Dao.getAllByAddressAndStatus(address,true);
         //注销(有垃圾数据)
@@ -127,17 +128,7 @@ public class Feip3v2ProtocolAnalysisData implements IAnalysisData {
         }
     }
 
-    private String getBindAddress(String txId) throws Exception{
-        RawTransaction rawTransaction = (RawTransaction)fchdClient.getRawTransaction(txId,true);
-        RawInput rawInput = rawTransaction.getVIn().get(0);
-        String id = rawInput.getTxId();
-        int vout = rawInput.getVOut();
 
-        rawTransaction = (RawTransaction)fchdClient.getRawTransaction(id,true);
-        RawOutput rawOutput = rawTransaction.getVOut().get(vout);
-        return rawOutput.getScriptPubKey().getAddresses().get(0);
-
-    }
 
     private String getNickName(String name,String address){
 

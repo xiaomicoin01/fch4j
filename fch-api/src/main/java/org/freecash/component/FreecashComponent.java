@@ -35,6 +35,18 @@ public class FreecashComponent {
     }
 
     /**
+     * 获取上链时间
+     * @param txId 交易ID
+     * @return 时间
+     * @throws Exception 异常
+     */
+    public Long getOnlineTime(String txId) throws Exception{
+        RawTransaction rawTransaction = (RawTransaction)fchdClient.getRawTransaction(txId,true);
+        return rawTransaction.getTime();
+
+    }
+
+    /**
      * 获取交易的所有接收方地址
      * @param txId 交易id
      * @return 交易接收方地址列表

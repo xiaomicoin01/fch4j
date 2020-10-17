@@ -79,6 +79,8 @@ public interface FchdClient {
 	Info getInfo() throws FreecashException, CommunicationException;
 	
 	MemPoolInfo getMemPoolInfo() throws FreecashException, CommunicationException;
+
+	List<String> getRawMemPool() throws FreecashException, CommunicationException;
 	
 	MiningInfo getMiningInfo() throws FreecashException, CommunicationException;
 

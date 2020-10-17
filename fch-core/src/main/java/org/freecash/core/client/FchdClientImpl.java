@@ -322,6 +322,14 @@ public class FchdClientImpl implements FchdClient {
 	}
 
 	@Override
+	public List<String> getRawMemPool() throws FreecashException, CommunicationException {
+		String memPoolInfoJson = rpcClient.execute(Commands.GET_RAW_MEM_POOL.getName());
+		List<String> memPoolInfo = rpcClient.getMapper().mapToEntity(memPoolInfoJson,
+				List.class);
+		return memPoolInfo;
+	}
+
+	@Override
 	public MiningInfo getMiningInfo() throws FreecashException, CommunicationException {
 		String miningInfoJson = rpcClient.execute(Commands.GET_MINING_INFO.getName());
 		MiningInfo miningInfo = rpcClient.getMapper().mapToEntity(miningInfoJson, MiningInfo.class);

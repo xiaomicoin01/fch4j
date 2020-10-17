@@ -81,7 +81,7 @@ public class BlockSyncJob {
                 RawTransaction t = this.client.getRawTransaction(txid, true);
 
                 List<RawOutput> outputs = t.getVOut();
-                processVoutAndVin(t,vins,vouts);
+                CommonTxUtil.processVoutAndVin(t,vins,vouts);
                 for (RawOutput out : outputs) {
                     String asm = out.getScriptPubKey().getAsm();
                     if (StringUtils.isEmpty(asm)) {
@@ -104,37 +104,5 @@ public class BlockSyncJob {
         blockInfoService.saveBlock(info);
         vins.forEach(vin->{fchVinService.save(vin);});
         vouts.forEach(vout->{fchVoutService.save(vout);});
-    }
-
-    private void processVoutAndVin(RawTransaction t,Set<FchVin> vins,Set<FchVout> vouts){
-        List<RawOutput> outputs = t.getVOut();
-        for(RawOutput out : outputs){
-            BigDecimal amount =  out.getValue();
-
-            List<String> addresses = out.getScriptPubKey().getAddresses();
-
-            if(addresses == null || addresses.size() == 0){
-                continue;
-            }
-
-            FchVout fchVout = new FchVout(
-                    SnowflakeIdWorker.getUUID(),
-                    t.getTxId(),
-                    addresses.get(0),
-                    out.getN(),
-                    amount
-            );
-            vouts.add(fchVout);
-        }
-
-        for(RawInput input : t.getVIn()){
-            String txId = input.getTxId();
-            if(Objects.isNull(txId)){
-                continue;
-            }
-            int n = input.getVOut();
-            FchVin tmp = new FchVin(SnowflakeIdWorker.getUUID(),txId,n);
-            vins.add(tmp);
-        }
     }
 }

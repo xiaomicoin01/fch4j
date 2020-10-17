@@ -17,7 +17,7 @@ import java.util.Objects;
  * @date 2020-05-24 19:54:44
  */
 @Table(name = "fch_vin",
-        indexes = { @Index(name = "vin_txid_n", columnList = "txid,n")})
+        indexes = { @Index(name = "vin_txid_n", columnList = "txid,n", unique = true)})
 @Entity
 @Data
 @NoArgsConstructor

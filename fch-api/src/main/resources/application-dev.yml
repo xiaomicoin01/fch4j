@@ -3,7 +3,10 @@ btc:
     batch: 10000
     corn: 0 * * * * ?
     update:
-      corn: 0 * * * * ?
+      corn: 0/10 * * * * ?
+      batch: 1000
+    memUpdate:
+      corn: 0/10 * * * * ?
       batch: 1000
 rpc:
   protocol: http

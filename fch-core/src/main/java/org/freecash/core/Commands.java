@@ -35,6 +35,7 @@ public enum Commands {
 	GET_HASHES_PER_SEC("gethashespersec", 0, 0),
 	GET_INFO("getinfo", 0, 0),
 	GET_MEM_POOL_INFO("getmempoolinfo", 0, 0),
+	GET_RAW_MEM_POOL("getrawmempool", 0, 0),
 	GET_MINING_INFO("getmininginfo", 0, 0),
 	GET_NEW_ADDRESS("getnewaddress", 0, 1),
 	GET_PEER_INFO("getpeerinfo", 0, 0),

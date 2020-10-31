@@ -3,23 +3,22 @@ package org.freecash.domain;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.freecash.component.FreeDriveEntity;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Date;
 
 /**
  * 知识库 Knowledge
  *
  * @author wanglin_自动生成
- * @date 2020-05-24 19:54:44
  */
 @Table(name = "fch_knowledge")
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Knowledge implements Serializable {
+public class Knowledge implements FreeDriveEntity {
 
     private static final long serialVersionUID = 1L;
     @Id

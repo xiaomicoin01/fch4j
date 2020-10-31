@@ -38,9 +38,10 @@ logging:
   root: DEBUG
 
 freecash:
-  amount: 0.01
-  address: FAxNcqAvdjMd9nhdzpggXn2Tu6khQTzjmr
-  fee: 0.0001
+  amount: 0.001
+  address: FMsaesLKdiFc4co21X2w4LaRWcbaSEFzm6
+  fee: 0.00005
+  privkey: L1NDhDzQsK4sMDhvcVTPVU3T8Xx7NoPXKadGvyoXidDqXXTesjsR
   freedrive:
     put: https://open.api.qingniao.cloud/api/put
     get: https://open.api.qingniao.cloud/api/get

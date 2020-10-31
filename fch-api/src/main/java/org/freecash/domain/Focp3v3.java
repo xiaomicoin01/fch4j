@@ -66,6 +66,12 @@ public class Focp3v3 implements Serializable {
     private String txId;
 
     /**
+     * cid
+     **/
+    @Column(name = "cid", columnDefinition = "varchar(200) comment 'cid'")
+    private String cid;
+
+    /**
      * 创建时间
      **/
     @Column(name = "create_date", columnDefinition = "datetime comment '创建时间'")

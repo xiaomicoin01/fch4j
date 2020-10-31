@@ -8,6 +8,7 @@ import org.freecash.dao.IFeip3v2Dao;
 import org.freecash.domain.Feip15;
 import org.freecash.domain.Feip3v2;
 import org.freecash.domain.ProtocolHeader;
+import org.freecash.service.Feip15Service;
 import org.freecash.utils.SnowflakeIdWorker;
 import org.freecash.utils.StringUtil;
 import org.springframework.stereotype.Component;
@@ -24,7 +25,7 @@ import java.util.stream.Collectors;
 @Log4j2
 public class Feip15ProtocolAnalysisData implements IAnalysisData {
     @Resource
-    private IFeip15Dao feip15Dao;
+    private Feip15Service feip15Service;
     @Resource
     private FreecashComponent freecashComponent;
     @Resource
@@ -74,10 +75,18 @@ public class Feip15ProtocolAnalysisData implements IAnalysisData {
         feip15.setProtocolNo(values.get(1));
         feip15.setProtocolVersion(values.get(2));
         feip15.setEnName(values.get(3));
-        feip15.setOtherName(values.get(4));
-        feip15.setAppVersion(values.get(5));
-        feip15.setCreateCid(values.get(6));
-        feip15.setDetail(values.get(7));
+        if(values.size()>4){
+            feip15.setOtherName(values.get(4));
+        }
+        if(values.size()>5){
+            feip15.setAppVersion(values.get(5));
+        }
+        if(values.size()>6){
+            feip15.setCreateCid(values.get(6));
+        }
+        if(values.size()>7){
+            feip15.setDetail(values.get(7));
+        }
         feip15.setStatus(true);
         feip15.setCid(cid);
         if(values.size()>8){
@@ -87,15 +96,15 @@ public class Feip15ProtocolAnalysisData implements IAnalysisData {
             feip15.setAppProtocol(values.get(9));
         }
 
-        feip15Dao.save(feip15);
+        feip15Service.save(feip15);
     }
 
     private void deleteAll(String cid){
-        List<Feip15> feip15 = feip15Dao.findAllByCid(cid).orElse(new ArrayList<>());
+        List<Feip15> feip15 = feip15Service.findAllByCid(cid).orElse(new ArrayList<>());
         if(!CollectionUtils.isEmpty(feip15)){
             feip15.forEach(item->{
                 item.setStatus(false);
-                feip15Dao.save(item);
+                feip15Service.save(item);
             });
         }
     }

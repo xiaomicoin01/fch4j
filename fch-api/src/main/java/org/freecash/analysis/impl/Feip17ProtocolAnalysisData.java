@@ -4,11 +4,11 @@ import com.google.common.collect.Lists;
 import lombok.extern.log4j.Log4j2;
 import org.freecash.analysis.IAnalysisData;
 import org.freecash.component.FreecashComponent;
-import org.freecash.dao.IFeip17Dao;
 import org.freecash.dao.IFeip3v2Dao;
 import org.freecash.domain.Feip17;
 import org.freecash.domain.Feip3v2;
 import org.freecash.domain.ProtocolHeader;
+import org.freecash.service.Feip17Service;
 import org.freecash.utils.SnowflakeIdWorker;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -20,13 +20,14 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
+ * 保险柜
  * @author wanglint
  **/
 @Component
 @Log4j2
 public class Feip17ProtocolAnalysisData implements IAnalysisData {
     @Resource
-    private IFeip17Dao feip17Dao;
+    private Feip17Service feip17Service;
     @Resource
     private FreecashComponent freecashComponent;
     @Resource
@@ -71,12 +72,16 @@ public class Feip17ProtocolAnalysisData implements IAnalysisData {
         feip17.setProtocolVersion(values.get(2));
         feip17.setAlgorithm(values.get(3));
         feip17.setCipherText(values.get(4));
-        feip17.setType(values.get(5));
-        feip17.setRemarks(values.get(6));
+        if(values.size() > 5){
+            feip17.setType(values.get(5));
+        }
+        if(values.size() > 6){
+            feip17.setRemarks(values.get(6));
+        }
         feip17.setCid(cid);
         feip17.setTxId(txId);
         feip17.setOnLineDate(Long.toString(time));
 
-        feip17Dao.save(feip17);
+        feip17Service.save(feip17);
     }
 }

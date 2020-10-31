@@ -1,5 +1,6 @@
 package org.freecash.analysis.impl;
 
+import com.google.common.collect.Lists;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.freecash.analysis.IAnalysisData;
@@ -41,9 +42,9 @@ public class Feip3v2ProtocolAnalysisData implements IAnalysisData {
      */
     @Override
     public List<ProtocolHeader> getType() {
-        return Arrays.asList(
-                new ProtocolHeader("FEIP","3","1"),
-                new ProtocolHeader("FEIP","3","2")
+        return Lists.newArrayList(
+                new ProtocolHeader("FEIP", "3", "1"),
+                new ProtocolHeader("FEIP", "3", "2")
         );
     }
 

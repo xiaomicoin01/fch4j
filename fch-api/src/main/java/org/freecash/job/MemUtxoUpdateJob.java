@@ -40,29 +40,29 @@ public class MemUtxoUpdateJob {
     @Value("${btc.job.memUpdate.batch}")
     private int batch;
 
-    @Scheduled(cron = "${btc.job.memUpdate.corn}")
-    @Transactional(rollbackOn = Exception.class)
+//    @Scheduled(cron = "${btc.job.memUpdate.corn}")
+//    @Transactional(rollbackOn = Exception.class)
     public void updateUtxo() throws Exception{
 
-        Set<FchVin> vins = new HashSet<>();
-        Set<FchVout> vouts = new HashSet<>();
-
-        List<String> txIds = client.getRawMemPool();
-        for (String txid : txIds) {
-            try {
-                Object obj = this.client.getRawTransaction(txid, true);
-                if(Objects.nonNull(obj)){
-                    RawTransaction t = (RawTransaction)obj;
-                    CommonTxUtil.processVoutAndVin(t,vins,vouts);
-                }else{
-                    log.error("从内存中解析,txid:{},失败",txid);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        vins.forEach(vin->{fchVinService.save(vin);});
-        vouts.forEach(vout->{fchVoutService.save(vout);});
+//        Set<FchVin> vins = new HashSet<>();
+//        Set<FchVout> vouts = new HashSet<>();
+//
+//        List<String> txIds = client.getRawMemPool();
+//        for (String txid : txIds) {
+//            try {
+//                Object obj = this.client.getRawTransaction(txid, true);
+//                if(Objects.nonNull(obj)){
+//                    RawTransaction t = (RawTransaction)obj;
+//                    CommonTxUtil.processVoutAndVin(t,vins,vouts);
+//                }else{
+//                    log.error("从内存中解析,txid:{},失败",txid);
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
+//        vins.forEach(vin->{fchVinService.save(vin);});
+//        vouts.forEach(vout->{fchVoutService.save(vout);});
     }
 }

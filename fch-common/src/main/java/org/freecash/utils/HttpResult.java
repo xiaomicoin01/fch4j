@@ -1,6 +1,7 @@
 package org.freecash.utils;
 
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
+@Builder
 public class HttpResult<T> {
     @ApiModelProperty("状态码，非0失败，0成功")
     private int code;
@@ -22,5 +24,13 @@ public class HttpResult<T> {
         this.code = status;
         this.message = message;
         this.data = data;
+    }
+
+    public static <T> HttpResult<T> SUCCESS(T data){
+        return HttpResult.<T>builder().code(0).message("").data(data).build();
+    }
+
+    public static <T> HttpResult<T> FAIL(int code, String message, T data){
+        return HttpResult.<T>builder().code(code).message(message).data(data).build();
     }
 }

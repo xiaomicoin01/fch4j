@@ -1,7 +1,7 @@
 package org.freecash.analysis;
 
 import lombok.extern.log4j.Log4j2;
-import org.freecash.domain.ProtocolHeader;
+import org.freecash.constant.ConstantKey;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -43,20 +43,25 @@ public class AnalysisDataComponent implements ApplicationContextAware {
         if(StringUtils.isEmpty(protocolValue)){
             return;
         }
-        String[] tmps = protocolValue.split("\\|");
-        if(tmps.length <3){
-            log.warn("协议内容：{}，长度少于3，不需要处理",protocolValue);
-            return;
-        }
-        String protocolName = tmps[0];
-        String protocolNo = tmps[1];
-        String protocolVersion = tmps[2];
-        IAnalysisData tmp = allAnalysisData.get(new ProtocolHeader(protocolName,protocolNo,protocolVersion));
-        if(Objects.isNull(tmp)){
-            log.error("不能处理协议内容：{}",protocolValue);
+        if(protocolValue.startsWith(ConstantKey.CID_PREFIX)){
+            String[] tmps = protocolValue.split("\\|");
+            if(tmps.length <3){
+                log.warn("协议内容：{}，长度少于3，不需要处理",protocolValue);
+                return;
+            }
+            String protocolName = tmps[0];
+            String protocolNo = tmps[1];
+            String protocolVersion = tmps[2];
+            IAnalysisData tmp = allAnalysisData.get(new ProtocolHeader(protocolName,protocolNo,protocolVersion));
+            if(Objects.isNull(tmp)){
+                log.error("不能处理协议内容：{}",protocolValue);
+            }else{
+                tmp.analysis(protocolValue,txId);
+            }
         }else{
-            tmp.analysis(protocolValue,txId);
+            //新版协议
         }
+
     }
 
     public static void main(String[] args) {

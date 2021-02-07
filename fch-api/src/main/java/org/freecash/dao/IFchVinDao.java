@@ -8,6 +8,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
  * UTXO模型
  * @author wanglint
  */
-public interface IFchVinDao extends PagingAndSortingRepository<FchVin, String>, JpaSpecificationExecutor<FchVin> {
+public interface IFchVinDao extends PagingAndSortingRepository<FchVin, Integer>, JpaSpecificationExecutor<FchVin> {
 
 }

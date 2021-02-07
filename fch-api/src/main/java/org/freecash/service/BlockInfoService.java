@@ -24,7 +24,7 @@ public class BlockInfoService {
 
     public BlockInfo getBlockSyncHeight() {
         BlockInfo info = blockInfoDao.getByKey(ConstantKey.BLOCK_SYNC_POTION).orElse(
-                new BlockInfo(SnowflakeIdWorker.getUUID(), ConstantKey.BLOCK_SYNC_POTION, "0", "同步区块高度", new Date()));
+                BlockInfo.builder().key(ConstantKey.BLOCK_SYNC_POTION).value("0").desp("同步区块高度").build());
         return info;
     }
 

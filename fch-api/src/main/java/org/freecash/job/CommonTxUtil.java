@@ -5,7 +5,6 @@ import org.freecash.core.domain.RawOutput;
 import org.freecash.core.domain.RawTransaction;
 import org.freecash.domain.FchVin;
 import org.freecash.domain.FchVout;
-import org.freecash.utils.SnowflakeIdWorker;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -25,13 +24,8 @@ public class CommonTxUtil {
                 continue;
             }
 
-            FchVout fchVout = new FchVout(
-                    SnowflakeIdWorker.getUUID(),
-                    t.getTxId(),
-                    addresses.get(0),
-                    out.getN(),
-                    amount
-            );
+            FchVout fchVout = FchVout.builder().txId(t.getTxId()).address(addresses.get(0)).n(out.getN())
+                    .amount(amount).onLineTime(t.getTime()).build();
             vouts.add(fchVout);
         }
 
@@ -41,7 +35,7 @@ public class CommonTxUtil {
                 continue;
             }
             int n = input.getVOut();
-            FchVin tmp = new FchVin(SnowflakeIdWorker.getUUID(),txId,n);
+            FchVin tmp = FchVin.builder().txId(txId).n(n).build();
             vins.add(tmp);
         }
     }

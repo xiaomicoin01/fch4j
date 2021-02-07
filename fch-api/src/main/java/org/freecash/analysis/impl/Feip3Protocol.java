@@ -4,41 +4,32 @@ import com.google.common.collect.Lists;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.freecash.analysis.IAnalysisData;
+import org.freecash.analysis.ProtocolHeader;
 import org.freecash.component.FreecashComponent;
-import org.freecash.core.client.FchdClient;
-import org.freecash.core.domain.RawInput;
-import org.freecash.core.domain.RawOutput;
-import org.freecash.core.domain.RawTransaction;
-import org.freecash.dao.IFeip3v2Dao;
-import org.freecash.domain.Feip3v2;
-import org.freecash.domain.ProtocolHeader;
-import org.freecash.utils.SnowflakeIdWorker;
+import org.freecash.dao.IFeip3Dao;
+import org.freecash.domain.Feip3;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
 /**
  * @author wanglint
- * @date 2020/5/17 15:01
  **/
 @Component
 @Log4j2
-public class Feip3v2ProtocolAnalysisData implements IAnalysisData {
+public class Feip3Protocol implements IAnalysisData {
     @Resource
     private FreecashComponent freecashComponent;
     @Resource
-    private IFeip3v2Dao feip3v2Dao;
+    private IFeip3Dao feip3Dao;
 
     /**
      * CID协议类型
-     *
-     * @return
      */
     @Override
     public List<ProtocolHeader> getType() {
@@ -57,7 +48,7 @@ public class Feip3v2ProtocolAnalysisData implements IAnalysisData {
     public void analysis(String protocolValue,String txId) throws Exception{
         String address = freecashComponent.getBindAddress(txId);
         String[] value = protocolValue.split("\\|");
-        List<Feip3v2> feip3v2 = feip3v2Dao.getAllByAddressAndStatus(address,true);
+        List<Feip3> feip3v2 = feip3Dao.getAllByAddressAndStatus(address,true);
         //注销(有垃圾数据)
         boolean isTrue = (value.length < 3) || (value.length > 3 && StringUtils.isEmpty(value[3]));
         if(isTrue){
@@ -72,12 +63,8 @@ public class Feip3v2ProtocolAnalysisData implements IAnalysisData {
 
         //新增
         if(CollectionUtils.isEmpty(feip3v2)){
-            Feip3v2 f = new Feip3v2();
-            f.setId(SnowflakeIdWorker.getUUID());
-            f.setProtocolName(value[0]);
-            f.setProtocolNo(Integer.valueOf(value[1]));
-            f.setProtocolVersion(value[2]);
-            f.setNickName(getNickName(value[3],address));
+            Feip3 f = new Feip3();
+            f.setName(getNickName(value[3],address));
             if(value.length>4){
                 f.setTag(value[4]);
             }
@@ -91,41 +78,40 @@ public class Feip3v2ProtocolAnalysisData implements IAnalysisData {
             f.setAddress(address);
             f.setStatus(true);
             f.setCreateDate(new Date());
-            feip3v2Dao.save(f);
+            feip3Dao.save(f);
             return;
         }
         //更新
-        if(value.length > 3 && StringUtils.isNotEmpty(value[3])){
+        if(StringUtils.isNotEmpty(value[3])){
             String tmp = value[3] + "_" + address.substring(address.length() - 4);
-            if(Objects.equals(tmp,feip3v2.get(0).getNickName()) &&
-                Objects.equals(feip3v2.get(0).getAddress(),address)){
+            if(Objects.equals(tmp,feip3v2.get(0).getName()) &&
+                    Objects.equals(feip3v2.get(0).getAddress(),address)){
                 log.warn("cid：{}，address:{}已经存在，且cid是一样的，不用操作，直接跳过",tmp, address);
                 return;
             }
 
             changeStatus(feip3v2);
 
-            Feip3v2 newF = new Feip3v2();
+            Feip3 newF = new Feip3();
             BeanUtils.copyProperties(feip3v2.get(0),newF,"id");
             newF.setStatus(true);
             String nickName = getNickName(value[3],address);
-            newF.setNickName(nickName);
+            newF.setName(nickName);
             newF.setCreateDate(new Date());
-            newF.setId(SnowflakeIdWorker.getUUID());
             newF.setAddress(address);
             if(value.length>6){
                 newF.setDetail(value[6]);
             }
             newF.setTxHash(txId);
-            feip3v2Dao.save(newF);
+            feip3Dao.save(newF);
         }
 
     }
 
-    private void changeStatus(List<Feip3v2> feip3v2) {
-        for (Feip3v2 f : feip3v2){
+    private void changeStatus(List<Feip3> feip3v2) {
+        for (Feip3 f : feip3v2){
             f.setStatus(false);
-            feip3v2Dao.save(f);
+            feip3Dao.save(f);
         }
     }
 
@@ -134,10 +120,10 @@ public class Feip3v2ProtocolAnalysisData implements IAnalysisData {
     private String getNickName(String name,String address){
 
         int len = 4;
-        String nickName = "";
+        String nickName;
         while(true){
             nickName = name + "_" + address.substring(address.length() - len);
-            List<Feip3v2> feip3v2s = feip3v2Dao.getAllByNickName(nickName);
+            List<Feip3> feip3v2s = feip3Dao.getAllByName(nickName);
             if(CollectionUtils.isEmpty(feip3v2s)){
                 break;
             }else{

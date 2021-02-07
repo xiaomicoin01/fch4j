@@ -1,7 +1,5 @@
 package org.freecash.analysis;
 
-import org.freecash.domain.ProtocolHeader;
-
 import java.util.List;
 
 /**

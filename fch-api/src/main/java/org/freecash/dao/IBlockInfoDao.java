@@ -11,7 +11,7 @@ import java.util.Optional;
  * 区块Dao
  * @author wanglint
  */
-public interface IBlockInfoDao extends PagingAndSortingRepository<BlockInfo, String>, JpaSpecificationExecutor<BlockInfo> {
+public interface IBlockInfoDao extends PagingAndSortingRepository<BlockInfo, Integer>, JpaSpecificationExecutor<BlockInfo> {
 	/**
 	 * 根据key查询区块信息
 	 * @param key key值

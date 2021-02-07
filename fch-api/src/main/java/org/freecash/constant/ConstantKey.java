@@ -11,4 +11,6 @@ public class ConstantKey {
 	public static final String UUID = "UUID";
 	public static final String USER_AGENT = "user-agent";
 
+	public static final String CID_PREFIX = "FEIP|3";
+
 }

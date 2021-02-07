@@ -1,20 +1,21 @@
 package org.freecash.component;
 
+import lombok.RequiredArgsConstructor;
 import org.freecash.core.client.FchdClient;
 import org.freecash.core.domain.RawInput;
 import org.freecash.core.domain.RawOutput;
 import org.freecash.core.domain.RawTransaction;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Component
+@RequiredArgsConstructor
 public class FreecashComponent {
-    @Resource
-    private FchdClient fchdClient;
+
+    private final FchdClient fchdClient;
 
     /**
      * 获取交易的发起方

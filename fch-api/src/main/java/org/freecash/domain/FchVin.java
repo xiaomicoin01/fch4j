@@ -1,13 +1,12 @@
 package org.freecash.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Objects;
 
 /**
@@ -22,14 +21,16 @@ import java.util.Objects;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class FchVin implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
 
     @Id
-    @Column(name = "pid",columnDefinition = " varchar(255) COMMENT 'ID'")
-    private String pid;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="pid")
+    private int pid;
 
     @Column(name = "txid",columnDefinition = " varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '交易ID'")
     private String txId;

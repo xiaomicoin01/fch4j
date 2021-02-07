@@ -1,36 +1,35 @@
 package org.freecash.domain;
 
-import javassist.bytecode.annotation.BooleanMemberValue;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.Objects;
 
 /**
  * 知识库 Knowledge
  *
  * @author wanglin_自动生成
- * @date 2020-05-24 19:54:44
  */
 @Table(name = "fch_vout",indexes = { @Index(name = "vout_txid_n", columnList = "txid,n", unique = true)})
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class FchVout implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
 
     @Id
-    @Column(name = "pid",columnDefinition = " varchar(255) COMMENT 'ID'")
-    private String pid;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="pid")
+    private int pid;
 
     @Column(name = "txid",columnDefinition = " varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '交易ID'")
     private String txId;
@@ -43,6 +42,9 @@ public class FchVout implements Serializable {
 
     @Column(name = "amount",columnDefinition = "varchar(255) NULL DEFAULT NULL COMMENT '数量'")
     private BigDecimal amount;
+
+    @Column(name = "onLineTime",columnDefinition = "int(11) NULL DEFAULT NULL COMMENT '上链时间'")
+    private Long onLineTime;
 
     @Override
     public boolean equals(Object o) {

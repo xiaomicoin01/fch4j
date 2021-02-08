@@ -51,6 +51,7 @@ public class Feip3Service {
             List<CidResponse.Cid> cids = result.getContent().stream().map(item -> {
                 CidResponse.Cid cid = CidResponse.Cid.builder().build();
                 BeanUtils.copyProperties(item, cid);
+                cid.setNickName(item.getName());
                 return cid;
             }).collect(Collectors.toList());
             return  CidResponse.builder().count(result.getTotalElements())

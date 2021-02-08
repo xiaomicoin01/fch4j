@@ -7,11 +7,9 @@ import org.freecash.dto.UtxoRequest;
 import org.freecash.dto.UtxoResponse;
 import org.freecash.service.FchVoutService;
 import org.freecash.utils.HttpResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(maxAge = 3600)
 @Api(value = "UTXO接口")
 @RestController
 @RequestMapping("api/v1/utxo")

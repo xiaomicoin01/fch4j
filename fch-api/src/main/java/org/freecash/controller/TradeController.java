@@ -7,12 +7,9 @@ import org.freecash.dto.CreateTradeRequest;
 import org.freecash.dto.CreateTradeResponse;
 import org.freecash.service.TradeService;
 import org.freecash.utils.HttpResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-
+@CrossOrigin(maxAge = 3600)
 @Api(value = "交易创建接口")
 @RestController
 @RequestMapping("api/v1/trade")

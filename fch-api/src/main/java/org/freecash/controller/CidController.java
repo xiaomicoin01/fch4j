@@ -7,11 +7,9 @@ import org.freecash.dto.CidRequest;
 import org.freecash.dto.CidResponse;
 import org.freecash.service.Feip3Service;
 import org.freecash.utils.HttpResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(maxAge = 3600)
 @Api(value = "CID接口")
 @RestController
 @RequestMapping("api/v1/cid")

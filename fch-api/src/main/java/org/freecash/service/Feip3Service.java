@@ -10,6 +10,7 @@ import org.freecash.utils.StringUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.Predicate;
@@ -38,7 +39,7 @@ public class Feip3Service {
         Page<Feip3> result =  feip3Dao.findAll((root, criteriaQuery, cb) ->{
             List<Predicate> predicates = Lists.newArrayList();
             if(StringUtil.notEmpty(request.getNickName())){
-                Predicate p = cb.like(root.get("name").as(String.class), request.getNickName());
+                Predicate p = cb.like(root.get("name").as(String.class), "%"+request.getNickName()+"%");
                 predicates.add(p);
             }
             if(StringUtil.notEmpty(request.getAddress())){
@@ -46,12 +47,13 @@ public class Feip3Service {
                 predicates.add(p);
             }
             return cb.and(predicates.toArray(new Predicate[0]));
-        } , PageRequest.of(request.getPageNumber()-1, request.getPageSize()));
+        } , PageRequest.of(request.getPageNumber()-1, request.getPageSize(), Sort.Direction.DESC, "createDate"));
         if(result.hasContent()){
             List<CidResponse.Cid> cids = result.getContent().stream().map(item -> {
                 CidResponse.Cid cid = CidResponse.Cid.builder().build();
                 BeanUtils.copyProperties(item, cid);
                 cid.setNickName(item.getName());
+                cid.setTxId(item.getTxHash());
                 return cid;
             }).collect(Collectors.toList());
             return  CidResponse.builder().count(result.getTotalElements())

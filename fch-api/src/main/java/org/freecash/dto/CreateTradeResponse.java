@@ -12,6 +12,7 @@ public class CreateTradeResponse {
     private Message message;
     private List<Input> inputs;
     private List<Output> outputs;
+    private List<Object> text;
 
     @Data
     @Builder

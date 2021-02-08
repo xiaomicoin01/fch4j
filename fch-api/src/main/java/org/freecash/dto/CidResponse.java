@@ -22,5 +22,6 @@ public class CidResponse {
         private String tag;
         private String invite_user;
         private String detail;
+        private String txId;
     }
 }

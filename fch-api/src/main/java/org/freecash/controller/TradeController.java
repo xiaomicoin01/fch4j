@@ -20,7 +20,7 @@ public class TradeController {
 
     @ApiOperation(value = "创建交易")
     @PostMapping("create")
-    public HttpResult<CreateTradeResponse> list(@RequestBody CreateTradeRequest request){
+    public HttpResult<CreateTradeResponse> list(@RequestBody CreateTradeRequest request) throws Exception{
         CreateTradeResponse response = tradeService.createTrade(request);
         return HttpResult.SUCCESS(response);
     }

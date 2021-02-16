@@ -147,27 +147,8 @@ public class HexStringUtil {
 
 
     public static void main(String args[]) throws Exception {
-        String src="我是你大爷";
-        System.out.println(byteToHex(src.getBytes()));
-        InputStream in =  new FileInputStream("C:\\Users\\wanglint\\Desktop\\培训问题.txt");
+        String src="aaaa";
+        System.out.println(stringToHexString(src));
 
-        StringBuffer sb = new StringBuffer();
-        java.io.ByteArrayOutputStream bos = new java.io.ByteArrayOutputStream();
-
-        byte[] buffer = new byte[1024];
-        int read = 1024;
-        int readSize = 1024;
-        while (read == readSize) {
-            read = in.read(buffer, 0, readSize);
-            bos.write(buffer, 0, read);
-        }
-
-        byte[] result = bos.toByteArray();
-
-        String hex = byteToHex(result);
-        System.out.println(hex);
-
-        result = hexToByte(hex);
-        IOUtils.write(result,new FileOutputStream("C:\\Users\\wanglint\\Desktop\\培训问题.json"));
     }
 }

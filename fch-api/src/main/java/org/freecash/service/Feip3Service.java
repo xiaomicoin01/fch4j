@@ -39,7 +39,7 @@ public class Feip3Service {
         Page<Feip3> result =  feip3Dao.findAll((root, criteriaQuery, cb) ->{
             List<Predicate> predicates = Lists.newArrayList();
             if(StringUtil.notEmpty(request.getNickName())){
-                Predicate p = cb.like(root.get("name").as(String.class), "%"+request.getNickName()+"%");
+                Predicate p = cb.like(root.get("name").as(String.class), "%"+request.getNickName().replaceAll("_","\\_")+"%");
                 predicates.add(p);
             }
             if(StringUtil.notEmpty(request.getAddress())){

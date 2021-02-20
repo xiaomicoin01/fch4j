@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,7 +27,7 @@ public class TradeService {
         List<FchVout> outs = voutService.findByIds(request.getUtxo());
         BigDecimal inCount = BigDecimal.ZERO;
         BigDecimal outCount = BigDecimal.ZERO;
-        BigDecimal fee;
+        BigDecimal fee = new BigDecimal(0.00001);
 
         List<CreateTradeResponse.Input> inputs = new ArrayList<>();
         for(int i=0;i<outs.size();i++){
@@ -49,16 +50,19 @@ public class TradeService {
                     .seq(i+1)
                     .build());
         }
-        CreateTradeResponse.Message message = CreateTradeResponse.Message.builder()
-                .msg(request.getMessage())
-                .dealType(3).msgtype(1).build();
 
-        int len = HexStringUtil.stringToHexString(StringUtils.isEmpty(request.getMessage()) ? "1" : request.getMessage()).length();
-        fee = BigDecimal.valueOf((outs.size() * 148 + 34 * (outputs.size() + 1) + 10 + len ) * 0.00000001);
+        CreateTradeResponse.Message message = null;
+        if(StringUtil.notEmpty(request.getMessage())){
+            message = CreateTradeResponse.Message.builder()
+                    .msg(request.getMessage())
+                    .dealType(3).msgtype(1).build();
+        }
+
         BigDecimal diff = inCount.subtract(outCount).subtract(fee);
         if(diff.compareTo(BigDecimal.ZERO) < 0){
             throw new Exception("金额不足");
         }
+
         if(diff.compareTo(BigDecimal.ZERO) > 0){
             outputs.add(CreateTradeResponse.Output.builder()
                     .address(outs.get(0).getAddress())
@@ -70,7 +74,9 @@ public class TradeService {
         List<Object> txt = Lists.newArrayList();
         txt.addAll(inputs);
         txt.addAll(outputs);
-        txt.add(message);
+        if(Objects.nonNull(message)){
+            txt.add(message);
+        }
 
         return CreateTradeResponse.builder().inputs(inputs).outputs(outputs)
                 .message(message).text(txt)

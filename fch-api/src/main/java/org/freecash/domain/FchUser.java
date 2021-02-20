@@ -12,17 +12,17 @@ import java.util.Date;
 /**
  * @author wanglint
  **/
-@Table(name = "t_sys_user")
+@Table(name = "fch_user")
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class SysUser {
+public class FchUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="pid")
-    private int pid;
+    private Integer pid;
 
     @Column(name="username",nullable=false)
     private String username;

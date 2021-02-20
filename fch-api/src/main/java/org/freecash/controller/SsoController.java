@@ -7,12 +7,12 @@ import io.swagger.annotations.ApiOperation;
 import org.freecash.constant.ConstantKey;
 import org.freecash.core.client.FchdClient;
 import org.freecash.domain.Feip3;
-import org.freecash.domain.SysUser;
+import org.freecash.domain.FchUser;
 import org.freecash.dto.*;
 import org.freecash.enm.ErrorCodeEnum;
 import org.freecash.jtw.util.JwtHelper;
 import org.freecash.service.Feip3Service;
-import org.freecash.service.SysUserService;
+import org.freecash.service.FchUserService;
 import org.freecash.utils.HttpResult;
 import org.freecash.utils.MD5Util;
 import org.freecash.utils.SnowflakeIdWorker;
@@ -37,7 +37,7 @@ public class SsoController {
     @Resource
     private Feip3Service feip3Service;
     @Resource
-    private SysUserService sysUserService;
+    private FchUserService fchUserService;
     /**
      * 获取登陆验证码
      */
@@ -101,10 +101,10 @@ public class SsoController {
         try {
             boolean verifyRes = client.verifyMessage(feip3.getAddress(),request.getCode(),uuid);
             if(verifyRes){
-                SysUser user;
-                SysUser old = sysUserService.findUserByUserName(cid);
+                FchUser user;
+                FchUser old = fchUserService.findUserByUserName(cid);
                 if(old == null){
-                    user = new SysUser();
+                    user = new FchUser();
                     user.setUsername(cid);
                     user.setNickname(cid);
                     user.setPassword(MD5Util.encode(request.getPassword()));
@@ -112,10 +112,10 @@ public class SsoController {
                     String privkey = client.dumpPrivKey(address);
                     user.setAddress(address);
                     user.setPrivkey(privkey);
-                    user = sysUserService.add(user);
+                    user = fchUserService.add(user);
                 }else{
                     old.setPassword(MD5Util.encode(request.getPassword()));
-                    user = sysUserService.add(old);
+                    user = fchUserService.add(old);
                 }
 
                 if(user != null){
@@ -142,7 +142,7 @@ public class SsoController {
 
         String userName = request.getCid();
         String password = MD5Util.encode(request.getPassword());
-        SysUser user = sysUserService.findUser(userName,password);
+        FchUser user = fchUserService.findUser(userName,password);
         if(user == null){
             return new HttpResult<>(ErrorCodeEnum.LOGIN_ERROR.getCode(),"CID或者密码错误",new PasswordLoginResponse());
         }

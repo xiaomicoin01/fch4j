@@ -29,7 +29,7 @@ public class FchVout implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="pid")
-    private int pid;
+    private Integer pid;
 
     @Column(name = "txid",columnDefinition = " varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '交易ID'")
     private String txId;

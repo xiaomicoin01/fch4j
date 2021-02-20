@@ -34,7 +34,7 @@ public class Feip3 implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pid")
-    private int pid;
+    private Integer pid;
 
     /**
      * 昵称

@@ -71,7 +71,7 @@ public class Feip3JsonProtocol implements IAnalysisData {
             changeStatus(feip3v2);
 
             Feip3 newF = new Feip3();
-            BeanUtils.copyProperties(feip3v2.get(0),newF,"id");
+            BeanUtils.copyProperties(feip3v2.get(0),newF,"pid");
             String nickName = getNickName(tmp.getString("name"),address);
             newF.setStatus(true);
             newF.setName(nickName);

@@ -93,7 +93,7 @@ public class Feip3Protocol implements IAnalysisData {
             changeStatus(feip3v2);
 
             Feip3 newF = new Feip3();
-            BeanUtils.copyProperties(feip3v2.get(0),newF,"id");
+            BeanUtils.copyProperties(feip3v2.get(0),newF,"pid");
             newF.setStatus(true);
             String nickName = getNickName(value[3],address);
             newF.setName(nickName);

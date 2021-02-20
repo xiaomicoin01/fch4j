@@ -17,14 +17,16 @@
             <!--每个日志文件的大小只能为100MB-->
             <maxFileSize>10MB</maxFileSize>
             <!--所有的日志文件总和大小不能超过1GB-->
-            <totalSizeCap>1GB</totalSizeCap>
+            <totalSizeCap>200MB</totalSizeCap>
             <!--删除两天以前的日志-->
-            <maxHistory>10</maxHistory>
+            <maxHistory>2</maxHistory>
         </rollingPolicy>
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %class{36} %L %M - %msg%xEx%n</pattern>
         </encoder>
     </appender>
+
+    <logger name="org.springframework.orm.jpa" level="ERROR"/>
 
     <root level="DEBUG">
         <appender-ref ref="FILE"/>

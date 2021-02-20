@@ -27,8 +27,10 @@
     </appender>
 
     <logger name="org.springframework.orm.jpa" level="ERROR"/>
+    <logger name="org.apache.http.impl" level="ERROR"/>
+    <logger name="org.apache.http.client.protocol" level="ERROR"/>
 
-    <root level="DEBUG">
+    <root level="ERROE">
         <appender-ref ref="FILE"/>
         <appender-ref ref="STDOUT"/>
     </root>

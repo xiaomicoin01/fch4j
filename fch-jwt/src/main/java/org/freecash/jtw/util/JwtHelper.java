@@ -1,7 +1,6 @@
 package org.freecash.jtw.util;
 
 import com.alibaba.fastjson.JSONObject;
-import lombok.extern.log4j.Log4j2;
 import org.freecash.jtw.constant.SecretConstant;
 import com.chtwm.component.secret.AESSecretUtil;
 import io.jsonwebtoken.Claims;

@@ -2,7 +2,7 @@ package org.freecash.analysis.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.freecash.analysis.IAnalysisData;
 import org.freecash.analysis.ProtocolHeader;
 import org.freecash.component.FreecashComponent;
@@ -20,7 +20,7 @@ import java.util.Objects;
  * @author wanglint
  **/
 @Component
-@Log4j2
+@Slf4j
 public class Feip3JsonProtocol implements IAnalysisData {
     @Resource
     private FreecashComponent freecashComponent;

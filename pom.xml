@@ -22,7 +22,6 @@
         <module>fch-api</module>
         <module>fch-rpc</module>
         <module>fch-jwt</module>
-        <module>fch-index</module>
     </modules>
 
     <properties>

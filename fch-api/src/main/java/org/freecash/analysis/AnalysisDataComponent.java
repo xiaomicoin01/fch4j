@@ -1,6 +1,6 @@
 package org.freecash.analysis;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.freecash.constant.ConstantKey;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -19,7 +19,7 @@ import java.util.Objects;
  * @date 2020/5/17 14:59
  **/
 @Component
-@Log4j2
+@Slf4j
 public class AnalysisDataComponent implements ApplicationContextAware {
     private ApplicationContext applicationContext;
     private Map<ProtocolHeader,IAnalysisData> allAnalysisData = new HashMap<>();

@@ -1,7 +1,7 @@
 package org.freecash.analysis.impl;
 
 import com.google.common.collect.Lists;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.freecash.analysis.IAnalysisData;
 import org.freecash.analysis.ProtocolHeader;
@@ -21,7 +21,7 @@ import java.util.Objects;
  * @author wanglint
  **/
 @Component
-@Log4j2
+@Slf4j
 public class Feip3Protocol implements IAnalysisData {
     @Resource
     private FreecashComponent freecashComponent;

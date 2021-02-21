@@ -13,7 +13,7 @@
 
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- rollover daily -->
-            <fileNamePattern>${LOG_HOME}/block_explorer-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>${LOG_HOME}/fch-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <!--每个日志文件的大小只能为100MB-->
             <maxFileSize>10MB</maxFileSize>
             <!--所有的日志文件总和大小不能超过1GB-->
@@ -26,11 +26,11 @@
         </encoder>
     </appender>
 
-    <logger name="org.springframework.orm.jpa" level="ERROR"/>
-    <logger name="org.apache.http.impl" level="ERROR"/>
-    <logger name="org.apache.http.client.protocol" level="ERROR"/>
+    <logger name="org.springframework" level="error"/>
+    <logger name="org.apache" level="error"/>
+    <logger name="org.hibernate" level="error"/>
 
-    <root level="ERROE">
+    <root level="error">
         <appender-ref ref="FILE"/>
         <appender-ref ref="STDOUT"/>
     </root>

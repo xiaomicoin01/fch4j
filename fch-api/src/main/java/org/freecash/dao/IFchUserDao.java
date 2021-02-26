@@ -14,5 +14,7 @@ import java.util.Optional;
 public interface IFchUserDao extends PagingAndSortingRepository<FchUser, Integer>, JpaSpecificationExecutor<FchUser> {
 
     Optional<FchUser> findByUsername(String userName);
+    Optional<FchUser> findByNickname(String nickName);
+    Optional<FchUser> findByAddress(String address);
     Optional<FchUser> findByUsernameAndPassword(String userName, String password);
 }

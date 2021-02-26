@@ -35,6 +35,14 @@ public class Feip3Service {
         return res.get(0);
     }
 
+    public Feip3 getFeip3ByAddress(String address){
+        List<Feip3> res = feip3Dao.getAllByAddressAndStatus(address,true);
+        if(res == null || res.size() == 0){
+            return null;
+        }
+        return res.get(0);
+    }
+
     public CidResponse query(CidRequest request){
         Page<Feip3> result =  feip3Dao.findAll((root, criteriaQuery, cb) ->{
             List<Predicate> predicates = Lists.newArrayList();

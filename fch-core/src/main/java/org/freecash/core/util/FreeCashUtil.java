@@ -15,8 +15,8 @@ public class FreeCashUtil {
         ECKey key = new ECKey();
 
         String privateKey = key.getPrivateKeyEncoded(params).toBase58();
-        String fromAddr = new Address(params, key.getPubKeyHash()).toBase58();
-        return Arrays.asList(privateKey,fromAddr);
+        String address = new Address(params, key.getPubKeyHash()).toBase58();
+        return Arrays.asList(privateKey,address);
     }
 
     public static String signMessage(String msg, String privateKey) {

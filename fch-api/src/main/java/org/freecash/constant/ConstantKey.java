@@ -12,5 +12,7 @@ public class ConstantKey {
 	public static final String USER_AGENT = "user-agent";
 
 	public static final String CID_PREFIX = "FEIP|3";
+	public static final String SESSION_USER = "session_user";
+	public static final String CODE = "session_code";
 
 }

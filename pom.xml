@@ -51,7 +51,7 @@
         <swagger-bootstrap-ui.version>1.9.5</swagger-bootstrap-ui.version>
         <commons-lang.version>3.3.2</commons-lang.version>
 
-        <bitcoin.version>0.14.7</bitcoin.version>
+        <bitcoin.version>0.25</bitcoin.version>
     </properties>
 
     <dependencyManagement>

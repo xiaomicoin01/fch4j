@@ -67,4 +67,8 @@ public class FchVoutService {
     public List<FchVout> findByIds(List<Integer> ids){
         return fchVoutDao.findAllByPidIn(ids);
     }
+
+    public List<FchVout> findByAddress(String address){
+        return fchVoutDao.findAllByAddress(address);
+    }
 }

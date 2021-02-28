@@ -19,4 +19,5 @@ public interface IFchVoutDao extends PagingAndSortingRepository<FchVout, Integer
     Page<FchVout> findAllByAddressAndTxIdNotIn(String address, List<String> txIds,Pageable page);
     Page<FchVout> findAllByTxIdNotIn(List<String> txIds,Pageable page);
     List<FchVout> findAllByPidIn(List<Integer> ids);
+    List<FchVout> findAllByAddress(String address);
 }

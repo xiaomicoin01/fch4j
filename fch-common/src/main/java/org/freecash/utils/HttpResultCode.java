@@ -5,4 +5,6 @@ public class HttpResultCode {
     public static final int EXCEPTION = 500;
 
     public static final int LOGIN_ERROR = 1000;
+    public static final int LOGIN_REQUIRE = 1001;
+
 }

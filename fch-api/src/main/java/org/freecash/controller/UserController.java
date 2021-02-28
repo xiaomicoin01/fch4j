@@ -34,7 +34,7 @@ public class UserController {
 
     @ApiOperation(value = "登陆")
     @PostMapping("login")
-    public HttpResult<UserResponse> login(@RequestBody UserRequest userRequest){
+    public HttpResult<UserResponse> login(@RequestBody UserRequest userRequest, HttpSession session){
         FchUser user = userService.findUserByUserName(userRequest.getUsername());
         if(Objects.isNull(user)){
             return HttpResult.FAIL(HttpResultCode.LOGIN_ERROR,"CID不存在",null);
@@ -42,6 +42,7 @@ public class UserController {
         if(!Objects.equals(user.getPassword(),userRequest.getPassword())){
             return HttpResult.FAIL(HttpResultCode.LOGIN_ERROR,"CID或者密码错误",null);
         }
+        session.setAttribute(ConstantKey.SESSION_USER, user);
         Feip3 feip3 = feip3Service.getFeip3(userRequest.getUsername());
         return HttpResult.SUCCESS(UserResponse.builder().username(user.getUsername())
                 .address(user.getAddress()).cidAddress(feip3.getAddress()).build());
@@ -79,6 +80,7 @@ public class UserController {
         if(Objects.isNull(user)){
             user = userService.createUser(feip3.getName());
         }
+        request.getSession().setAttribute(ConstantKey.SESSION_USER, user);
         return HttpResult.SUCCESS(UserResponse.builder().username(user.getUsername())
                 .address(user.getAddress()).cidAddress(feip3.getAddress()).build());
     }
@@ -109,6 +111,7 @@ public class UserController {
             user.setPassword(userRequest.getPassword());
             user = userService.add(user);
         }
+        request.getSession().setAttribute(ConstantKey.SESSION_USER, user);
         return HttpResult.SUCCESS(UserResponse.builder().username(user.getUsername())
                 .address(user.getAddress()).cidAddress(feip3.getAddress()).build());
     }

@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.freecash.analysis.AnalysisDataComponent;
 import org.freecash.core.domain.Block;
@@ -18,6 +19,7 @@ import org.freecash.api.BlockApi;
 import org.freecash.constant.ConstantKey;
 import org.freecash.core.domain.enums.ScriptTypes;
 import org.freecash.domain.*;
+import org.freecash.enm.TxTypeEnum;
 import org.freecash.service.*;
 import org.freecash.utils.HexStringUtil;
 import org.freecash.utils.StringUtil;
@@ -36,21 +38,18 @@ import org.springframework.util.StringUtils;
 @Configuration
 @EnableScheduling
 @Slf4j
+@RequiredArgsConstructor
 public class BlockSyncJob {
     @Value("${btc.job.batch}")
     private int batch;
-    @Resource
-    private BlockInfoService blockInfoService;
-    @Resource
-    private AnalysisDataComponent analysisDataComponent;
-    @Resource
-    private BlockApi client;
-    @Resource
-    private FchVoutService fchVoutService;
-    @Resource
-    private FchVinService fchVinService;
-    @Resource
-    private AddressBalanceService addressBalanceService;
+    private final BlockInfoService blockInfoService;
+    private final AnalysisDataComponent analysisDataComponent;
+    private final BlockApi client;
+    private final FchVoutService fchVoutService;
+    private final FchVinService fchVinService;
+    private final AddressBalanceService addressBalanceService;
+    private final FchUserService fchUserService;
+    private final FchUserTxRecordService fchUserTxRecordService;
 
     @Scheduled(cron = "${btc.job.corn}")
     @Transactional(rollbackFor = Exception.class)
@@ -125,8 +124,34 @@ public class BlockSyncJob {
         }
         info.setValue(Integer.toString(end));
         blockInfoService.saveBlock(info);
-        vins.forEach(fchVinService::save);
-        vouts.forEach(fchVoutService::save);
+        for(FchVin item : vins){
+            fchVinService.save(item);
+            RawTransaction t = this.client.getRawTransaction(item.getTxId(), true);
+            String address = t.getVOut().get(item.getN()).getScriptPubKey().getAddresses().get(0);
+            FchUser user = fchUserService.findUserByAddress(address);
+            if(Objects.nonNull(user)){
+                RawTransaction t1  = this.client.getRawTransaction(item.getParentTxId(), true);
+                t1.getVOut().forEach(i->{
+                    FchUserTxRecord record = FchUserTxRecord.builder().address(i.getScriptPubKey().getAddresses().get(0))
+                            .inOrOut(TxTypeEnum.OUT)
+                            .txDate(new BigDecimal(t.getTime())).txId(item.getTxId())
+                            .amount(i.getValue())
+                            .build();
+                    fchUserTxRecordService.save(record);
+                });
+            }
+        }
+        vouts.forEach(item->{
+            fchVoutService.save(item);
+            String address = item.getAddress();
+            FchUser user = fchUserService.findUserByAddress(address);
+            if(Objects.nonNull(user)){
+                FchUserTxRecord record = FchUserTxRecord.builder().address(address).inOrOut(TxTypeEnum.IN)
+                        .txDate(new BigDecimal(item.getOnLineTime())).txId(item.getTxId()).amount(item.getAmount())
+                        .build();
+                fchUserTxRecordService.save(record);
+            }
+        });
         updateAddress(balance);
     }
 

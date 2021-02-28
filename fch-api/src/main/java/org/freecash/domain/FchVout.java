@@ -31,6 +31,9 @@ public class FchVout implements Serializable {
     @Column(name="pid")
     private Integer pid;
 
+    @Column(name = "parentTxId",columnDefinition = " varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '父交易ID'")
+    private String parentTxId;
+
     @Column(name = "txid",columnDefinition = " varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '交易ID'")
     private String txId;
 
@@ -40,7 +43,7 @@ public class FchVout implements Serializable {
     @Column(name = "n",columnDefinition = "int(11) NULL DEFAULT NULL COMMENT '索引'")
     private int n;
 
-    @Column(name = "amount",columnDefinition = "varchar(255) NULL DEFAULT NULL COMMENT '数量'")
+    @Column(precision = 23, scale = 8)
     private BigDecimal amount;
 
     @Column(name = "onLineTime",columnDefinition = "int(11) NULL DEFAULT NULL COMMENT '上链时间'")

@@ -15,8 +15,7 @@ public enum ErrorCodeEnum {
     FCH_ERROR(1000,"客户端报错"),
     SERVICE_ERROR(1001,"业务异常"),
     TOKEN_ERROR(1002,"无效token"),
-    LOGIN_ERROR(1003,"登录失败"),
-    FREE_DRIVE_ERROR(1004,"freedrive报错");
+    LOGIN_ERROR(1003,"登录失败");
     private int code;
     private String message;
 }

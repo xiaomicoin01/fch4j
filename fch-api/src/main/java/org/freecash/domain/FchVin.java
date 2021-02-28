@@ -32,6 +32,9 @@ public class FchVin implements Serializable {
     @Column(name="pid")
     private Integer pid;
 
+    @Column(name = "parentTxId",columnDefinition = " varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '父交易ID'")
+    private String parentTxId;
+
     @Column(name = "txid",columnDefinition = " varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '交易ID'")
     private String txId;
 

@@ -126,20 +126,20 @@ public class BlockSyncJob {
         blockInfoService.saveBlock(info);
         for(FchVin item : vins){
             fchVinService.save(item);
-            RawTransaction t = this.client.getRawTransaction(item.getTxId(), true);
-            String address = t.getVOut().get(item.getN()).getScriptPubKey().getAddresses().get(0);
-            FchUser user = fchUserService.findUserByAddress(address);
-            if(Objects.nonNull(user)){
-                RawTransaction t1  = this.client.getRawTransaction(item.getParentTxId(), true);
-                t1.getVOut().forEach(i->{
-                    FchUserTxRecord record = FchUserTxRecord.builder().address(i.getScriptPubKey().getAddresses().get(0))
-                            .inOrOut(TxTypeEnum.OUT)
-                            .txDate(new BigDecimal(t.getTime())).txId(item.getTxId())
-                            .amount(i.getValue())
-                            .build();
-                    fchUserTxRecordService.save(record);
-                });
-            }
+//            RawTransaction t = this.client.getRawTransaction(item.getTxId(), true);
+//            String address = t.getVOut().get(item.getN()).getScriptPubKey().getAddresses().get(0);
+//            FchUser user = fchUserService.findUserByAddress(address);
+//            if(Objects.nonNull(user)){
+//                RawTransaction t1  = this.client.getRawTransaction(item.getParentTxId(), true);
+//                t1.getVOut().forEach(i->{
+//                    FchUserTxRecord record = FchUserTxRecord.builder().address(i.getScriptPubKey().getAddresses().get(0))
+//                            .inOrOut(TxTypeEnum.OUT)
+//                            .txDate(new BigDecimal(t.getTime())).txId(item.getTxId())
+//                            .amount(i.getValue())
+//                            .build();
+//                    fchUserTxRecordService.save(record);
+//                });
+//            }
         }
         vouts.forEach(item->{
             fchVoutService.save(item);

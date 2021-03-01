@@ -8,10 +8,12 @@ import org.freecash.constant.ConstantKey;
 import org.freecash.core.client.FchdClient;
 import org.freecash.domain.AddressBalance;
 import org.freecash.domain.FchUser;
+import org.freecash.domain.FchUserTxRecord;
 import org.freecash.domain.FchVout;
 import org.freecash.dto.CreateTradeRequest;
 import org.freecash.dto.FchUserTxRecordRequest;
 import org.freecash.dto.FchUserTxRecordResponse;
+import org.freecash.enm.TxTypeEnum;
 import org.freecash.service.AddressBalanceService;
 import org.freecash.service.FchUserTxRecordService;
 import org.freecash.service.FchVoutService;
@@ -29,6 +31,7 @@ import org.tools.TxOutput;
 
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -103,6 +106,18 @@ public class WalletController {
 
         String tx = FchTool.createTransactionSign(inputs,outputs,tradeRequest.getMessage(),user.getAddress(),fee);
         String txId = client.sendRawTransaction(tx,true);
+
+        for(CreateTradeRequest.To to : tradeRequest.getTo()){
+            FchUserTxRecord record = new FchUserTxRecord();
+            record.setAddress(to.getAddress());
+            record.setAmount(new BigDecimal(to.getAmount() ));
+            record.setInOrOut(TxTypeEnum.OUT);
+            record.setTxDate(new BigDecimal(new Date().getTime() / 1000));
+            record.setTxId(txId);
+            fchUserTxRecordService.save(record);
+        }
+
+
         return HttpResult.SUCCESS(txId);
     }
 }

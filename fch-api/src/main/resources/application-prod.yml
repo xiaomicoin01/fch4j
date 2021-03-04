@@ -10,7 +10,7 @@ btc:
       batch: 1000
 rpc:
   protocol: http
-  host: 119.45.251.246
+  host: 172.17.0.1
   port: 34452
   user: darkcoinrpc
   password: 123gfjk3R3pCCVjHtbRde2s5kzdf233sa
@@ -20,10 +20,9 @@ server:
 
 spring:
   datasource:
-    #url: jdbc:mysql://mysql:3306/freecash?charset=utf8mb4&useSSL=false
-    url: jdbc:mysql://119.45.251.246:10000/freecash?charset=utf8mb4&useSSL=false
+    url: jdbc:mysql://119.45.251.246:10000/freecash?charset=utf8mb4&useSSL=false&rewriteBatchedStatements=true
     username: root
-    password: root
+    password: root123
     driver-class-name: com.mysql.jdbc.Driver
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect

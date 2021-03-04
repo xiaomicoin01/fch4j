@@ -6,9 +6,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @EnableJpaAuditing
 @SpringBootApplication
+@EnableTransactionManagement
 public class ApiApplication {
 
     public static void main(String[] args) {

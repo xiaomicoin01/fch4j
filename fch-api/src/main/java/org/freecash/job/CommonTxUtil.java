@@ -25,7 +25,7 @@ public class CommonTxUtil {
             }
 
             FchVout fchVout = FchVout.builder().txId(t.getTxId()).address(addresses.get(0)).n(out.getN())
-                    .amount(amount).onLineTime(t.getTime()).parentTxId(t.getTxId()).build();
+                    .amount(amount).onLineTime(t.getTime()).build();
             vouts.add(fchVout);
         }
 
@@ -35,7 +35,7 @@ public class CommonTxUtil {
                 continue;
             }
             int n = input.getVOut();
-            FchVin tmp = FchVin.builder().txId(txId).parentTxId(t.getTxId()).n(n).build();
+            FchVin tmp = FchVin.builder().txId(txId).n(n).build();
             vins.add(tmp);
         }
     }

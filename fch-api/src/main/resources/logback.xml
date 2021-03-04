@@ -30,7 +30,7 @@
     <logger name="org.apache" level="error"/>
     <logger name="org.hibernate" level="error"/>
 
-    <root level="error">
+    <root level="debug">
         <appender-ref ref="FILE"/>
         <appender-ref ref="STDOUT"/>
     </root>

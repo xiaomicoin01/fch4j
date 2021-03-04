@@ -3,7 +3,6 @@ package org.freecash.service;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import org.freecash.core.client.FchdClient;
-import org.freecash.core.util.CollectionUtils;
 import org.freecash.dao.IFchVoutDao;
 import org.freecash.domain.FchVout;
 import org.freecash.dto.UtxoRequest;
@@ -11,8 +10,13 @@ import org.freecash.dto.UtxoResponse;
 import org.freecash.utils.StringUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,9 +31,17 @@ public class FchVoutService {
 
     private final IFchVoutDao fchVoutDao;
     private final FchdClient fchdClient;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     public FchVout save(FchVout fchVout){
         return this.fchVoutDao.save(fchVout);
+    }
+
+    public void saveAll(Collection<FchVout> fchVout){
+        String sql = "INSERT INTO fch_vout (`address`, `amount`, `n`, `onLineTime`, `txid`) " +
+                "VALUES (:address, :amount, :n, :onLineTime, :txId)";
+        SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(fchVout);
+        namedParameterJdbcTemplate.batchUpdate(sql, batch);
     }
 
     public int delete(String txId, int n){

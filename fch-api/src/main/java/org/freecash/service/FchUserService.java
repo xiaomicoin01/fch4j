@@ -1,5 +1,6 @@
 package org.freecash.service;
 
+import com.google.common.collect.Lists;
 import org.freecash.core.util.FreeCashUtil;
 import org.freecash.dao.IFchUserDao;
 import org.freecash.domain.FchUser;
@@ -7,6 +8,7 @@ import org.freecash.utils.SnowflakeIdWorker;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.persistence.criteria.Predicate;
 import java.util.List;
 
 /**
@@ -32,6 +34,13 @@ public class FchUserService {
 
     public FchUser findUserByAddress(String address){
         return fchUserDao.findByAddress(address).orElse(null);
+    }
+
+    public List<FchUser> getAll(){
+        return fchUserDao.findAll((root, criteriaQuery, cb) ->{
+            List<Predicate> predicates = Lists.newArrayList();
+            return cb.and(predicates.toArray(new Predicate[0]));
+        });
     }
 
     public FchUser findUser(String username, String password){

@@ -124,8 +124,9 @@ public class BlockSyncJob {
         }
         info.setValue(Integer.toString(end));
         blockInfoService.saveBlock(info);
-        for(FchVin item : vins){
-            fchVinService.save(item);
+        fchVinService.saveAll(vins);
+//        for(FchVin item : vins){
+//            fchVinService.save(item);
 //            RawTransaction t = this.client.getRawTransaction(item.getTxId(), true);
 //            String address = t.getVOut().get(item.getN()).getScriptPubKey().getAddresses().get(0);
 //            FchUser user = fchUserService.findUserByAddress(address);
@@ -140,12 +141,13 @@ public class BlockSyncJob {
 //                    fchUserTxRecordService.save(record);
 //                });
 //            }
-        }
+//        }
+
+        fchVoutService.saveAll(vouts);
+        List<String> addressList = fchUserService.getAll().stream().map(FchUser::getAddress).collect(Collectors.toList());
         vouts.forEach(item->{
-            fchVoutService.save(item);
             String address = item.getAddress();
-            FchUser user = fchUserService.findUserByAddress(address);
-            if(Objects.nonNull(user)){
+            if(addressList.contains(address)){
                 FchUserTxRecord record = FchUserTxRecord.builder().address(address).inOrOut(TxTypeEnum.IN)
                         .txDate(new BigDecimal(item.getOnLineTime())).txId(item.getTxId()).amount(item.getAmount())
                         .build();

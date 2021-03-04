@@ -28,8 +28,11 @@ public class FchUserTxRecord {
     @Column(name="pid")
     private Integer pid;
 
-    @Column(name="address",nullable=false)
-    private String address;
+    @Column(name="from_address")
+    private String fromAddress;
+
+    @Column(name="to_address")
+    private String toAddress;
 
     @Column(name="in_or_out",nullable=false)
     @Enumerated(EnumType.STRING)

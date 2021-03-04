@@ -32,15 +32,18 @@ public class FchUserTxRecordService {
         Page<FchUserTxRecord> result =  fchUserTxRecordDao.findAll((root, criteriaQuery, cb) ->{
             List<Predicate> predicates = Lists.newArrayList();
             if(StringUtil.notEmpty(request.getAddress())){
-                Predicate p = cb.equal(root.get("address").as(String.class), request.getAddress());
+                Predicate p = cb.equal(root.get("fromAddress").as(String.class), request.getAddress());
+                predicates.add(p);
+                p = cb.equal(root.get("toAddress").as(String.class), request.getAddress());
                 predicates.add(p);
             }
-            return cb.and(predicates.toArray(new Predicate[0]));
+            return cb.or(predicates.toArray(new Predicate[0]));
         } , PageRequest.of(request.getPageNumber()-1, request.getPageSize(), Sort.Direction.DESC, "pid"));
         if(result.hasContent()){
             List<FchUserTxRecordResponse.Record> cids = result.getContent().stream().map(item -> {
                 FchUserTxRecordResponse.Record cid = FchUserTxRecordResponse.Record.builder().build();
                 BeanUtils.copyProperties(item, cid);
+                cid.setAddress(item.getToAddress());
                 cid.setTxDate(new Date(item.getTxDate().longValue()*1000));
                 return cid;
             }).collect(Collectors.toList());

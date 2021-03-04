@@ -144,16 +144,19 @@ public class BlockSyncJob {
 //        }
 
         fchVoutService.saveAll(vouts);
-        List<String> addressList = fchUserService.getAll().stream().map(FchUser::getAddress).collect(Collectors.toList());
-        vouts.forEach(item->{
-            String address = item.getAddress();
-            if(addressList.contains(address)){
-                FchUserTxRecord record = FchUserTxRecord.builder().address(address).inOrOut(TxTypeEnum.IN)
-                        .txDate(new BigDecimal(item.getOnLineTime())).txId(item.getTxId()).amount(item.getAmount())
-                        .build();
-                fchUserTxRecordService.save(record);
-            }
-        });
+        if(end > 610000){
+            List<String> addressList = fchUserService.getAll().stream().map(FchUser::getAddress).collect(Collectors.toList());
+            vouts.forEach(item->{
+                String address = item.getAddress();
+                if(addressList.contains(address)){
+                    FchUserTxRecord record = FchUserTxRecord.builder().toAddress(address).inOrOut(TxTypeEnum.IN)
+                            .txDate(new BigDecimal(item.getOnLineTime())).txId(item.getTxId()).amount(item.getAmount())
+                            .build();
+                    fchUserTxRecordService.save(record);
+                }
+            });
+        }
+
         updateAddress(balance);
     }
 

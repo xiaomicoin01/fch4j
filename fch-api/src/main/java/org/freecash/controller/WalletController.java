@@ -109,7 +109,8 @@ public class WalletController {
 
         for(CreateTradeRequest.To to : tradeRequest.getTo()){
             FchUserTxRecord record = new FchUserTxRecord();
-            record.setAddress(to.getAddress());
+            record.setToAddress(to.getAddress());
+            record.setFromAddress(user.getAddress());
             record.setAmount(new BigDecimal(to.getAmount() ));
             record.setInOrOut(TxTypeEnum.OUT);
             record.setTxDate(new BigDecimal(new Date().getTime() / 1000));

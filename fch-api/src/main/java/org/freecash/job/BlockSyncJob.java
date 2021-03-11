@@ -29,6 +29,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 /**
@@ -149,10 +150,14 @@ public class BlockSyncJob {
             vouts.forEach(item->{
                 String address = item.getAddress();
                 if(addressList.contains(address)){
-                    FchUserTxRecord record = FchUserTxRecord.builder().toAddress(address).inOrOut(TxTypeEnum.IN)
-                            .txDate(new BigDecimal(item.getOnLineTime())).txId(item.getTxId()).amount(item.getAmount())
-                            .build();
-                    fchUserTxRecordService.save(record);
+                    //判断是否是找零返回的余额，如果是忽略不计，防止用户误会
+                    List<FchUserTxRecord> existRecord = fchUserTxRecordService.getRecord(item.getTxId(), TxTypeEnum.OUT);
+                    if(CollectionUtils.isEmpty(existRecord)){
+                        FchUserTxRecord record = FchUserTxRecord.builder().toAddress(address).type(TxTypeEnum.IN)
+                                .txDate(new BigDecimal(item.getOnLineTime())).txId(item.getTxId()).amount(item.getAmount())
+                                .build();
+                        fchUserTxRecordService.save(record);
+                    }
                 }
             });
         }

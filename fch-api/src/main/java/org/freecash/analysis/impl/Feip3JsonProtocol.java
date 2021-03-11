@@ -48,37 +48,19 @@ public class Feip3JsonProtocol implements IAnalysisData {
         String address = freecashComponent.getBindAddress(txId);
         List<Feip3> feip3v2 = feip3Dao.getAllByAddressAndStatus(address,true);
         JSONObject tmp = JSONObject.parseObject(protocolValue);
-        //注销(有垃圾数据)
-        if(!tmp.containsKey("name")){
-            changeStatus(feip3v2);
-            return;
-        }
-
+        String operation = tmp.getJSONObject("data").getString("operation");
+        String name = tmp.getJSONObject("data").getString("name");
         //新增
-        if(CollectionUtils.isEmpty(feip3v2)){
-            Feip3 f = Feip3.builder().name(tmp.getString("name")).txHash(txId)
-                    .address(address).status(true).homePage(tmp.getString("homepage")).build();
+        if(Objects.equals(operation,"register")){
+            String fullName = getNickName(name, address);
+            Feip3 f = Feip3.builder().name(fullName).txHash(txId)
+                    .address(address).status(true).homePage("").build();
             feip3Dao.save(f);
-            return;
-        }else{
-            String name = tmp.getString("name") + "_" + address.substring(address.length() - 4);
-            if(Objects.equals(name,feip3v2.get(0).getName()) &&
-                    Objects.equals(feip3v2.get(0).getAddress(),address)){
-                log.warn("cid：{}，address:{}已经存在，且cid是一样的，不用操作，直接跳过",tmp, address);
-                return;
-            }
-
             changeStatus(feip3v2);
+        }else if(Objects.equals(operation,"unregister")){
+            changeStatus(feip3v2);
+        }else{
 
-            Feip3 newF = new Feip3();
-            BeanUtils.copyProperties(feip3v2.get(0),newF,"pid");
-            String nickName = getNickName(tmp.getString("name"),address);
-            newF.setStatus(true);
-            newF.setName(nickName);
-            newF.setAddress(address);
-            newF.setHomePage(tmp.getString("homepage"));
-            newF.setTxHash(txId);
-            feip3Dao.save(newF);
         }
 
     }

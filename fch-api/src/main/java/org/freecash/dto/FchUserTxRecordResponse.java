@@ -25,7 +25,7 @@ public class FchUserTxRecordResponse {
     @Builder
     public static class Record{
         private String address;
-        private TxTypeEnum inOrOut;
+        private TxTypeEnum type;
         private String txId;
         @JSONField(format="yyyy-MM-dd HH:mm:ss")
         private Date txDate;

@@ -112,7 +112,7 @@ public class WalletController {
             record.setToAddress(to.getAddress());
             record.setFromAddress(user.getAddress());
             record.setAmount(new BigDecimal(to.getAmount() ));
-            record.setInOrOut(TxTypeEnum.OUT);
+            record.setType(TxTypeEnum.OUT);
             record.setTxDate(new BigDecimal(new Date().getTime() / 1000));
             record.setTxId(txId);
             fchUserTxRecordService.save(record);

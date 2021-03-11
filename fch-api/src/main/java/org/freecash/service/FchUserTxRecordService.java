@@ -6,6 +6,7 @@ import org.freecash.dao.IFchUserTxRecordDao;
 import org.freecash.domain.FchUserTxRecord;
 import org.freecash.dto.FchUserTxRecordRequest;
 import org.freecash.dto.FchUserTxRecordResponse;
+import org.freecash.enm.TxTypeEnum;
 import org.freecash.utils.StringUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
@@ -26,6 +27,10 @@ public class FchUserTxRecordService {
 
     public void save(FchUserTxRecord record){
         fchUserTxRecordDao.save(record);
+    }
+
+    public List<FchUserTxRecord> getRecord(String txId, TxTypeEnum type){
+        return fchUserTxRecordDao.findAllByTxIdAndType(txId,type).orElse(null);
     }
 
     public FchUserTxRecordResponse query(FchUserTxRecordRequest request){

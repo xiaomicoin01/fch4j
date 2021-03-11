@@ -36,7 +36,7 @@ public class FchUserTxRecord {
 
     @Column(name="in_or_out",nullable=false)
     @Enumerated(EnumType.STRING)
-    private TxTypeEnum inOrOut;
+    private TxTypeEnum type;
 
     @Column(name="txId",nullable=false)
     private String txId;

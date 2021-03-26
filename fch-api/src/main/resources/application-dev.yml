@@ -21,7 +21,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/tbl?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&rewriteBatchedStatements=true
+    url: jdbc:mysql://localhost:3306/freecash?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&rewriteBatchedStatements=true
     username: root
     password: root
     driver-class-name: com.mysql.jdbc.Driver
@@ -42,31 +42,8 @@ freecash:
   address: FMsaesLKdiFc4co21X2w4LaRWcbaSEFzm6
   fee: 0.00005
   privkey: L1NDhDzQsK4sMDhvcVTPVU3T8Xx7NoPXKadGvyoXidDqXXTesjsR
-  freedrive:
-    put: https://open.api.qingniao.cloud/api/put
-    get: https://open.api.qingniao.cloud/api/get
-    list: https://open.api.qingniao.cloud/api/list
-    get_drive_info: https://open.api.qingniao.cloud/api/get_drive_info
-    auth: https://open.api.qingniao.cloud/api/auth
-  protocols:
-    - FIPA1
-    - FIPA2
-    - FEIP1
-    - FEIP2
-    - FEIP3
-    - FEIP4
-    - FEIP5
-    - FEIP6
-    - FEIP7
-    - FEIP8
-    - FEIP9
-    - FEIP10
-    - FEIP11
-    - FEIP12
-    - FEIP15
-    - FEIP16
-    - FOCP1
-    - FOCP2
-    - FOCP3
-    - FOCP4
-    - FOCP5
+  freeDrive:
+    put: http://47.119.148.93:4001/v0/cavern/file/put
+    get: http://47.119.148.93:4001/v0/cavern/file/get
+    list: http://47.119.148.93:4001/v0/cavern/file/index
+    check: http://47.119.148.93:4001/v0/cavern/file/check

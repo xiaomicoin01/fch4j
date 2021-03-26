@@ -16,18 +16,18 @@ import java.util.List;
 @Data
 @Configuration
 @ConfigurationProperties(prefix = "freecash")
-public class FreecashConfig {
+public class FreeDriveConfig {
     private BigDecimal amount;
     private String address;
     private BigDecimal fee;
-    private Freedrive freedrive;
+    private FreeDrive freeDrive;
     private List<String> protocols;
 
     @Data
-    static class Freedrive{
+    public static class FreeDrive{
         String put;
-        String update;
+        String list;
         String get;
-        String getDriveId;
+        String check;
     }
 }

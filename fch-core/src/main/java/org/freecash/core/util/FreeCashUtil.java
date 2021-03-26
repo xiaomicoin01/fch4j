@@ -1,10 +1,12 @@
 package org.freecash.core.util;
 
-import org.bitcoinj.core.Address;
-import org.bitcoinj.core.DumpedPrivateKey;
-import org.bitcoinj.core.ECKey;
+import org.bitcoinj.core.*;
+import org.bitcoinj.wallet.DeterministicSeed;
+import org.bitcoinj.wallet.Wallet;
+import org.bouncycastle.util.encoders.Hex;
 import org.freecash.core.param.FchNetWorkParams;
 
+import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.List;
 
@@ -37,9 +39,25 @@ public class FreeCashUtil {
     }
 
     public static void main(String[] args) throws Exception {
-        String signMessage = "HwYFvnD38at5mgZ2AXBZ06bFMQWAP+kj+Wrd6RpPf7zrcfw4gFc2gl+jHz14taYe7AAskKGSafkCqbfB3qNNOp4=";
-        String message = "123123";
-        String address = "FJbBv9bRcmq6fHBnFrg2DrQFQZupfBTC3t";
-        System.out.println(validMessage(address,signMessage,message));
+        NetworkParameters networkParameters = FchNetWorkParams.get() ;
+        DeterministicSeed seed = new DeterministicSeed(new SecureRandom(), 128, "");
+        Wallet wallet;
+        String mnemonics = "";
+        String privateKey = "";
+        String publicKey = "";
+        String address = "";
+        String pwd = "";
+            wallet = Wallet.fromSeed(networkParameters, seed);
+            //私钥
+            privateKey = wallet.currentReceiveKey().getPrivateKeyAsWiF(networkParameters);
+            //助记词
+            mnemonics = wallet.getKeyChainSeed().getMnemonicCode().toString();
+            publicKey = Hex.toHexString(ECKey.publicKeyFromPrivate(wallet.currentReceiveKey().getPrivKey(), true));
+            //地址
+            address = wallet.currentReceiveAddress().toBase58();
+
+        System.out.println("privateKey："+ privateKey);
+        System.out.println("publicKey："+ publicKey);
+        System.out.println("address："+ address);
     }
 }

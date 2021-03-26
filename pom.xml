@@ -22,6 +22,7 @@
         <module>fch-api</module>
         <module>fch-rpc</module>
         <module>fch-jwt</module>
+        <module>fch-freedrive</module>
     </modules>
 
     <properties>
@@ -50,7 +51,7 @@
         <springfox.version>2.9.2</springfox.version>
         <swagger-bootstrap-ui.version>1.9.5</swagger-bootstrap-ui.version>
         <commons-lang.version>3.3.2</commons-lang.version>
-
+        <guava.version>26.0-jre</guava.version>
         <bitcoin.version>0.25</bitcoin.version>
     </properties>
 
@@ -86,6 +87,11 @@
             <dependency>
                 <groupId>org.freecash</groupId>
                 <artifactId>fch-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.freecash</groupId>
+                <artifactId>freedrive</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -177,6 +183,13 @@
                 <artifactId>commons-collections4</artifactId>
                 <version>${commons-collections4.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid</artifactId>

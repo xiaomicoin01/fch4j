@@ -4,6 +4,7 @@ import org.apache.http.*;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ConnectionKeepAliveStrategy;
 import org.apache.http.conn.HttpClientConnectionManager;
@@ -118,6 +119,30 @@ public class HttpClientComponent {
         } finally {
             httpPost.abort();
             httpPost.completed();
+            if (response != null) {
+                ((CloseableHttpResponse) response).close();
+            }
+        }
+    }
+
+    public static String send(HttpGet httpGet) throws Exception {
+        HttpResponse response = null;
+        try {
+            response = httpclient.execute(httpGet);
+            response.setLocale(Locale.CHINESE);
+            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+                HttpEntity entity = response.getEntity();
+                String html = EntityUtils.toString(entity, "UTF-8");
+                entity.getContent().close();
+                return html;
+            } else {
+                throw new Exception("发送数据处理报错," + response.getStatusLine().getStatusCode() + "," + response.getStatusLine().getReasonPhrase());
+            }
+        } catch (IOException e) {
+            throw e;
+        } finally {
+            httpGet.abort();
+            httpGet.completed();
             if (response != null) {
                 ((CloseableHttpResponse) response).close();
             }

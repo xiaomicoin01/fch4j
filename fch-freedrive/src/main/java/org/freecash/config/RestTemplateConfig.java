@@ -11,7 +11,8 @@ public class RestTemplateConfig {
     @ConditionalOnMissingBean(RestTemplate.class)
     @Bean
     public RestTemplate createTemplate(){
-        return new RestTemplate();
+        RestTemplate template = new RestTemplate();
+        return template;
     }
 }
 

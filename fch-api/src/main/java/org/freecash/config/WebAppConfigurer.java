@@ -6,8 +6,10 @@ import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import org.freecash.controller.interceptor.LoginHandlerInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 import java.util.List;
@@ -57,5 +59,22 @@ public class WebAppConfigurer  extends WebMvcConfigurationSupport {
 
         //4、将convert添加到converters当中.
         converters.add(fastConverter);
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        /**
+         * SpringBoot自动配置本身并不会把/swagger-ui.html
+         * 这个路径映射到对应的目录META-INF/resources/下面
+         * 采用WebMvcConfigurerAdapter将swagger的静态文件进行发布;
+         */
+        registry.addResourceHandler("swagger-ui.html")
+                .addResourceLocations("classpath:/META-INF/resources/");
+
+        registry.addResourceHandler("/webjars/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/");
+        //将所有/static/** 访问都映射到classpath:/static/ 目录下
+        registry.addResourceHandler("/static/**").addResourceLocations(ResourceUtils.CLASSPATH_URL_PREFIX +"/static/");
+        super.addResourceHandlers(registry);
     }
 }

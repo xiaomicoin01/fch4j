@@ -156,7 +156,7 @@ public class JwtHelper {
        String jsonWebKey = generateJWT("123", "Judy",
                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36");
        System.out.println(jsonWebKey);
-        TimeUnit.SECONDS.sleep(20);
+        TimeUnit.SECONDS.sleep(10);
        Claims claims =  parseJWT(jsonWebKey);
        System.out.println(claims);
        System.out.println(validateLogin(jsonWebKey));

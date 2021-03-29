@@ -1,4 +1,4 @@
-package org.freecash.controller;
+package org.freecash.controller.api;
 
 import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.Api;
@@ -30,7 +30,7 @@ import javax.servlet.http.HttpSession;
  **/
 @Api(value = "CID登陆接口")
 @RestController
-@RequestMapping("api/v1/auth")
+@RequestMapping("api/v1/tool/sso")
 public class SsoController {
     @Resource
     private FchdClient client;
@@ -42,7 +42,7 @@ public class SsoController {
      * 获取登陆验证码
      */
     @ApiOperation(value = "获取随机码")
-    @PostMapping("token")
+    @PostMapping("random")
     public HttpResult<TokenResponse> getToken(){
         HttpSession session = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getSession();
         String uuid = SnowflakeIdWorker.getUUID();

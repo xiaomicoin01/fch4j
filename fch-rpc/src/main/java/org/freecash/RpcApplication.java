@@ -1,11 +1,10 @@
 package org.freecash;
 
 import org.freecash.core.client.FchdClient;
-import org.freecash.api.VerboseFchdClientImpl;
+import org.freecash.controller.api.VerboseFchdClientImpl;
 import org.freecash.util.ResourceUtils;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import javax.annotation.Resource;

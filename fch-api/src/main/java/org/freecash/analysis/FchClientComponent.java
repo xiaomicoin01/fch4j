@@ -1,7 +1,7 @@
 package org.freecash.analysis;
 
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.freecash.api.VerboseFchdClientImpl;
+import org.freecash.controller.api.VerboseFchdClientImpl;
 import org.freecash.core.client.FchdClient;
 import org.freecash.util.ResourceUtils;
 import org.springframework.context.annotation.Bean;

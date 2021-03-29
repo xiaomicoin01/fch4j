@@ -7,9 +7,7 @@
         <artifactId>fch</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
-    <groupId>org.freecash</groupId>
     <artifactId>fch-api</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
     <name>fch-api</name>
     <description>Demo project for Spring Boot</description>
 
@@ -56,7 +54,6 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>${lombok.version}</version>
         </dependency>
 
         <dependency>

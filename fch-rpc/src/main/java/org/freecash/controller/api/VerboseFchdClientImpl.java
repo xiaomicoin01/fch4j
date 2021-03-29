@@ -1,4 +1,4 @@
-package org.freecash.api;
+package org.freecash.controller.api;
 
 import java.math.BigDecimal;
 import java.util.List;

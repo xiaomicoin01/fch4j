@@ -4,8 +4,6 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import javax.annotation.Resource;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +13,7 @@ import org.freecash.core.domain.Block;
 import org.freecash.core.domain.RawInput;
 import org.freecash.core.domain.RawOutput;
 import org.freecash.core.domain.RawTransaction;
-import org.freecash.api.BlockApi;
+import org.freecash.controller.api.BlockApi;
 import org.freecash.constant.ConstantKey;
 import org.freecash.core.domain.enums.ScriptTypes;
 import org.freecash.domain.*;

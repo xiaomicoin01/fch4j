@@ -1,4 +1,4 @@
-package org.freecash.api;
+package org.freecash.controller.api;
 
 import org.freecash.core.client.FchdClient;
 import org.freecash.core.domain.Block;

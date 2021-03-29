@@ -17,7 +17,7 @@ import java.security.SecureRandom;
 import java.util.List;
 
 @CrossOrigin(maxAge = 3600)
-@Api(value = "钱包API接口")
+@Api(tags = "钱包API接口")
 @RestController
 @RequestMapping("api/v1/tool/wallet")
 @RequiredArgsConstructor
@@ -38,7 +38,7 @@ public class WalletApi {
                 .build());
     }
 
-    @ApiOperation(value = "获取助记符，公钥，私钥和地址")
+    @ApiOperation(value = "签名认证")
     @PostMapping("valid/message")
     public HttpResult<ValidMessageResponse> validMessage(@RequestBody ValidMessageRequest request){
         boolean res = FreeCashUtil.validMessage(request.getAddress(), request.getSignMessage(),request.getMessage());

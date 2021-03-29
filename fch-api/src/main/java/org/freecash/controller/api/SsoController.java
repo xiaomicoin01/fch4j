@@ -28,7 +28,7 @@ import javax.servlet.http.HttpSession;
 /**
  * @author wanglint
  **/
-@Api(value = "CID登陆接口")
+@Api(tags = "基于CID的单点登陆接口")
 @RestController
 @RequestMapping("api/v1/tool/sso")
 public class SsoController {

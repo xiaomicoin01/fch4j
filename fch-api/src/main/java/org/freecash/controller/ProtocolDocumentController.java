@@ -8,6 +8,7 @@ import org.freecash.utils.HttpResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 @CrossOrigin(maxAge = 3600)
 @Api(tags = "协议文档接口")
@@ -20,7 +21,7 @@ public class ProtocolDocumentController {
     @PostMapping("content")
     public HttpResult<String> list(String fileName) throws Exception{
         InputStream input = this.getClass().getClassLoader().getResourceAsStream("protocols/" + fileName);
-        String content = IOUtils.toString(input, "UTF-8");
+        String content = IOUtils.toString(input, StandardCharsets.UTF_8);
         return HttpResult.SUCCESS(content);
     }
 }

@@ -1,5 +1,6 @@
 package org.freecash.controller.api;
 
+import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -59,6 +60,18 @@ public class WalletApi {
                 .build());
     }
 
+    @ApiOperation(value = "签名消息")
+    @PostMapping("sign/message")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "privateKey", value = "私钥", required = true, dataType = "string"),
+            @ApiImplicitParam(name = "message", value = "消息", required = true, dataType = "string")
+    })
+    public HttpResult<String> signMessage(String privateKey, String message){
+        String signMsg = FreeCashUtil.signMessage(message, privateKey);
+
+        return HttpResult.SUCCESS(signMsg);
+    }
+
     @ApiOperation(value = "通过地址获取公钥")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "address", value = "地址", required = true, dataType = "string")
@@ -76,5 +89,19 @@ public class WalletApi {
         String[] res = asm.split("\\[ALL\\|FORKID\\]");
         String pk = res.length == 1 ? "" : res[1].trim();
         return HttpResult.SUCCESS(pk);
+    }
+
+    @ApiOperation(value = "广播交易")
+    @PostMapping("broadcast")
+    public HttpResult<String> broadcastTransaction(@RequestBody TransactionRequest hex) throws Exception{
+        String txId = fchdClient.sendRawTransaction(hex.getHex(),true);
+        return HttpResult.SUCCESS(txId);
+    }
+
+    @ApiOperation(value = "解码交易")
+    @PostMapping("decode")
+    public HttpResult<String> decode(@RequestBody TransactionRequest hex) throws Exception{
+        String tx = JSONObject.toJSONString(fchdClient.decodeRawTransaction(hex.getHex()));
+        return HttpResult.SUCCESS(tx);
     }
 }

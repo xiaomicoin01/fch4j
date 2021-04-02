@@ -47,3 +47,5 @@ freecash:
     get: http://47.119.148.93:4001/v0/cavern/file/get
     list: http://47.119.148.93:4001/v0/cavern/file/index
     check: http://47.119.148.93:4001/v0/cavern/file/check
+file:
+  path: E:\temp

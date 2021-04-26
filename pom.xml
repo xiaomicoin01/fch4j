@@ -33,7 +33,7 @@
         <lombok.version>1.18.2</lombok.version>
         <commons-lang3.version>3.4</commons-lang3.version>
         <commons-net.version>3.6</commons-net.version>
-        <commons-io.version>2.5</commons-io.version>
+        <commons-io.version>2.7</commons-io.version>
         <commons-collections4.version>4.1</commons-collections4.version>
         <apache.commons-codec>1.11</apache.commons-codec>
         <mysql-connector.version>8.0.13</mysql-connector.version>
